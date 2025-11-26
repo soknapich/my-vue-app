@@ -19,6 +19,7 @@ router.beforeEach(async (to, from, next) => {
     } else if (isValidToken && to.path === '/login') {
       next({ path: '/' })
     } else {
+      //console.log(from);
       next();
     }
   }

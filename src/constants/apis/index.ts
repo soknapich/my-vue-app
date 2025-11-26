@@ -10,7 +10,6 @@ interface Authentication {
   verifyToken: ApiAction;
   refreshToken: ApiAction;
   verifyWebpage: ApiAction;
-  getAllUserRole: ApiAction;
 }
 
 interface User {
@@ -20,21 +19,6 @@ interface User {
   getOneUser: ApiAction;
 }
 
-interface UserAd {
-  getAllUserAd: ApiAction;
-}
-
-interface TransactionLog {
-  getAll: ApiAction;
-  getOne: ApiAction;
-}
-interface UploadVoucherDump {
-  upload: ApiAction;
-}
-interface GeneralLedgerEntry {
-  getAll: ApiAction;
-  exportFile: ApiAction
-}
 
 interface ChartOfAccount {
   getAll: ApiAction;
@@ -44,11 +28,6 @@ interface ChartOfAccount {
 interface ApiConfig {
   authentication: Authentication;
   user: User;
-  userAd: UserAd;
-  transactionLog: TransactionLog;
-  voucherDump: UploadVoucherDump;
-  generalLedgerEntry: GeneralLedgerEntry;
-  chartOfAccount: ChartOfAccount;
 }
 
 const APIs: ApiConfig = {
@@ -87,51 +66,7 @@ const APIs: ApiConfig = {
       url: 'users',
       method: 'get',
     },
-  },
-  userAd: {
-    getAllUserAd: {
-      url: 'userAd',
-      method: 'get',
-    },
-  },
-  transactionLog: {
-    getAll: {
-      url: 'transaction-log',
-      method: 'get',
-    },
-    getOne: {
-      url: 'transaction-log',
-      method: 'get',
-    },
-  },
-  voucherDump: {
-    upload: {
-      url: 'mds/upload-voucher-dump-manually',
-      method: 'post',
-    },
-  },
-  generalLedgerEntry: {
-    getAll: {
-      url: '/users',
-      method: 'get',
-    },
-    exportFile: {
-      url: 'gl-entry/export-file',
-      method: 'post',
-    },
-
-  },
-  chartOfAccount: {
-    getAll: {
-      url: 'gl-entry/chart-of-account',
-      method: 'get',
-    },
-
-    syncAll: {
-      url: 'gl-entry/sync-chart-of-account',
-      method: 'post',
-    },
-  },
+  }
 };
 
 export default APIs;
