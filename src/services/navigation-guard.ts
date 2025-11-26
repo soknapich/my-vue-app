@@ -4,23 +4,20 @@ import { getToken, setToken, removeAllToken } from '@/services/authentication'; 
 
 router.beforeEach(async (to, from, next) => {
   const token = (await getToken()) || '';
-
   /**before each step have to verify token */
-
   /**if token is not valid, remove it unless it's expired which has to refresh token automatically */
   if (!token && to.path != '/login') {
     next({ name: 'login' });
   } else {
+     //console.log("22 no token found, redirecting to login");
     const resultTokenValidation = await verifyToken({
       token
     });
-
-    const isValidToken = resultTokenValidation.status === 200 && resultTokenValidation.data?.token ? true : false;
-    
+    const isValidToken = (resultTokenValidation && resultTokenValidation.status === 200 && resultTokenValidation.data?.data) ? true : false;
     if (!isValidToken && to.meta.requiresAuth) {
       next({ name: 'login' });
     } else if (isValidToken && to.path === '/login') {
-      next({path: '/'})
+      next({ path: '/' })
     } else {
       next();
     }

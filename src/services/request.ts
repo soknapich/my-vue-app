@@ -45,33 +45,16 @@ service.interceptors.response.use(
   },
   async (error) => {
     if (error.response?.status === 401) {
-
-      //console.log('401 error - attempting to refresh token');
-      /**
-       * Refresh Token
-       */
-      const token = (await getToken()) || '';
-      const refreshToken = (await getToken('refreshToken')) || '';
-      if (!refreshToken) {
-        // No refresh token, redirect to login
-        // store.dispatch('authentication/verifyToken', false);
-        console.log("error");
-        
-        return Promise.reject(error);
-      }
+        return false;
       
-      const newTokenResult = await doRefreshToken({ token, refreshToken });
-      if (newTokenResult) {
-        await setToken('token', newTokenResult.data);
-        // store.dispatch('authentication/verifyToken', true);
-      }
-
-      // Revoke the failed request
-      error.config.headers.Authorization = `Bearer ${newTokenResult.data}`;
-      // return with custom axios service instead of axios because we still need interceptor and other format like all other request
-      return service(error.config);
     } else if (error.response?.status === 403) {
-      
+      const refreshToken = (await getToken('refreshToken')) || '';
+      const newTokenResult = await doRefreshToken({ refreshToken });
+      //console.log(newTokenResult.data.token);
+      if (newTokenResult) {
+        await setToken('token', newTokenResult.data.token);
+        await setToken('refreshToken', newTokenResult.data.refreshToken);
+      }
     } else {
       /**
        * Show Error Alert Message
@@ -116,14 +99,4 @@ service.interceptors.response.use(
     }
   }
 );
-// function showAlertMessage({ isSuccess: Boolean, message: String }) {
-//   const timeout = isSuccess ? 1000 : 10000;
-//   store.dispatch('alert-msg/showHide', {
-//     isSuccess,
-//     msg: message,
-//     is_show: true,
-//     timeout
-//   });
-// }
-
 export default service;

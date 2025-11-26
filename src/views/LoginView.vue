@@ -48,6 +48,7 @@ const handleLogin = async () => {
         password: password.value
     });
 
+    
     if (result && result.status === 200) {
         await setToken('token', result.data?.token)
         await setToken('refreshToken', result.data?.refreshToken);
