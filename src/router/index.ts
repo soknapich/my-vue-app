@@ -17,7 +17,7 @@ const routes = [
     children: [
       {
         path: '/',
-        name: 'Home',
+        name: 'home',
         component: HomeView,
         meta: {
           requiresAuth: true
@@ -25,7 +25,7 @@ const routes = [
       },
       {
         path: '/product',
-        name: 'Product',
+        name: 'product',
         component: ProductView,
         meta: {
           requiresAuth: true
@@ -33,7 +33,7 @@ const routes = [
       },
       {
         path: '/setting',
-        name: 'Setting',
+        name: 'setting',
         component: SettingView,
         meta: {
           requiresAuth: true

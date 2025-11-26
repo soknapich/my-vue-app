@@ -32,23 +32,12 @@
         </div>
       </div>
     </div>
+    <ConfirmationAlert v-model="showLogoutConfirm" confirmationLabel="Logout" cancelLabel="Cancel"
+      :onConfirm="logout" confirmationButtonColor="bg-red-600" />
 
-    <!-- Logout Confirmation Modal -->
-    <div v-if="showLogoutConfirm"
-      class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-      <div class="bg-white p-6 rounded shadow-lg w-80">
-        <h2 class="text-lg font-semibold mb-4 text-gray-800">Confirm Logout</h2>
-        <p class="text-sm text-gray-600 mb-4">Are you sure you want to log out?</p>
-        <div class="flex justify-end space-x-3">
-          <button @click="showLogoutConfirm = false" class="px-4 py-2 text-sm rounded bg-gray-200">
-            Cancel
-          </button>
-          <button @click="logout" class="px-4 py-2 text-sm rounded bg-red-600 text-white">
-            Logout
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- <LoadingDialog v-model="showLogoutConfirm" title="Working on it..." /> -->
+    <!-- <AlertDialog v-model="showLogoutConfirm" title="Logging out" cancelLabel="Cancel" :showCancel="true" /> -->
+
   </header>
 </template>
 
@@ -56,9 +45,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { setToken, setUserInfoCookie } from '@/services/authentication';
+import ConfirmationAlert from '@/components/ConfirmationAlert.vue';
+import AlertDialog from '@/components/AlertDialog.vue';
+import LoadingDialog from '@/components/LoadingDialog.vue';
 
 const router = useRouter();
-const props = defineProps<{
+defineProps<{
   title: string
   breadcrumbs: string[]
 }>();
@@ -75,8 +67,8 @@ const logout = async () => {
   showLogoutConfirm.value = false
   // 🔐 Perform logout logic here (e.g., clear token, redirect)
   console.log('Logging out...');
-  await setToken('token', )
-  await setToken('refreshToken','');
+  await setToken('token',)
+  await setToken('refreshToken', '');
   await setUserInfoCookie('');
 
   router.push({ path: '/login' });
