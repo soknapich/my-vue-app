@@ -52,6 +52,14 @@ service.interceptors.response.use(
        */
       const token = (await getToken()) || '';
       const refreshToken = (await getToken('refreshToken')) || '';
+      if (!refreshToken) {
+        // No refresh token, redirect to login
+        // store.dispatch('authentication/verifyToken', false);
+        console.log("error");
+        
+        return Promise.reject(error);
+      }
+      
       const newTokenResult = await doRefreshToken({ token, refreshToken });
       if (newTokenResult) {
         await setToken('token', newTokenResult.data);
@@ -63,13 +71,7 @@ service.interceptors.response.use(
       // return with custom axios service instead of axios because we still need interceptor and other format like all other request
       return service(error.config);
     } else if (error.response?.status === 403) {
-      // const route_to =
-      //   router && router.history && router.history.pending
-      //     ? router.history.pending.name
-      //     : '';
-      // if (!router || route_to !== '/') {
-      //   await router.replace({ path: '/' });
-      // }
+      
     } else {
       /**
        * Show Error Alert Message

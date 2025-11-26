@@ -67,7 +67,7 @@ const logout = async () => {
   showLogoutConfirm.value = false
   // 🔐 Perform logout logic here (e.g., clear token, redirect)
   console.log('Logging out...');
-  await setToken('token',)
+  await setToken('token','')
   await setToken('refreshToken', '');
   await setUserInfoCookie('');
 
