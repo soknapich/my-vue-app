@@ -28,8 +28,7 @@ const toBase64 = (file) => {
 
 const onOnchangeFile = async (event) => {
     const files = Array.from(event.target.files);
-    base64Files.length = 0; // Clear previous files
-
+    base64Files.length = 0; // Clear previous files	
     for (const file of files) {
         const base64 = await toBase64(file);
         const cleanBase64 = base64.replace(/^data:.*;base64,/, "");
