@@ -5,17 +5,16 @@
 
             <form @submit.prevent="handleLogin" class="space-y-4">
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Email</label>
-                    <input v-model="email" type="email" required
+                    <label for="email">Email</label>
+                    <!-- <input v-model="email" type="email" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter your email" />
+                        placeholder="Enter your email" /> -->
+                    <InputText id="email" v-model="email" size="small" aria-describedby="username-help" fluid/>
                 </div>
 
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                    <input v-model="password" type="password" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter your password" />
+                    <label for="password">Password</label>
+                    <Password id="password" v-model="password" size="small" toggleMask :feedback="false" fluid />
                 </div>
 
                 <button type="submit"
@@ -37,6 +36,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { signin } from "@/apis/authentication";
 import { setToken, setUserInfoCookie } from '@/services/authentication';
+import { InputText, Password } from 'primevue';
 
 const router = useRouter();
 const email = ref('')
@@ -44,18 +44,27 @@ const password = ref('')
 
 const handleLogin = async () => {
     const result = await signin({
-        email: email.value,
-        password: password.value
+        grant_type: 'password',
+        username: email.value,
+        password: password.value,
+        client_id: 5,
+        client_secret: 'wUV6ftjHDZHu290UMqCvlcEqNcmvdGVCwAqjr6Ml',
+        scope: '*'
     });
 
-    
+
     if (result && result.status === 200) {
-        await setToken('token', result.data?.token)
-        await setToken('refreshToken', result.data?.refreshToken);
-        await setUserInfoCookie(result.data?.user);
+        console.log(result);
+
+        await setToken('token', result.data?.access_token)
+        await setToken('refreshToken', result.data?.refresh_token);
+        await setUserInfoCookie({
+            id: 1,
+            name: 'test'
+        });
 
         router.push({ path: '/' });
-    }else{
+    } else {
         alert('Login failed. Please check your credentials and try again.');
     }
 

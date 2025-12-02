@@ -10,17 +10,6 @@
       aria-expanded="!collapsed"
     >
       <div class="flex items-center justify-between px-3 py-4">
-        <div class="flex items-center gap-3">
-          <img
-            src="@/assets/vue.svg"
-            alt="JACCS Logo"
-            class="h-8"
-          />
-          <h2 v-if="!collapsed" class="text-sm font-semibold text-gray-600">
-            
-          </h2>
-        </div>
-
         <!-- Toggle Button -->
         <button
           @click="toggle"

@@ -5,14 +5,16 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="border border-gray-300 px-2 py-1 text-left">ID</th>
-                    <th class="border border-gray-300 px-2 py-1 text-left">Name</th>
+                    <th class="border border-gray-300 px-2 py-1 text-left">Full Name</th>
+                    <th class="border border-gray-300 px-2 py-1 text-left">Login Name</th>
                     <th class="border border-gray-300 px-2 py-1 text-left">Email</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="user in data" :key="user.id" class="hover:bg-gray-50">
                     <td class="border border-gray-300 px-2 py-1">{{ user.id }}</td>
-                    <td class="border border-gray-300 px-2 py-1">{{ user.username }}</td>
+                     <td class="border border-gray-300 px-2 py-1">{{ `${user.first_name} ${user.last_name}` }}</td>
+                    <td class="border border-gray-300 px-2 py-1">{{ user.name }}</td>
                     <td class="border border-gray-300 px-2 py-1">{{ user.email }}</td>
                 </tr>
             </tbody>
@@ -27,8 +29,10 @@ import { getAll } from "@/apis/user";
 
 interface User {
     id: number;
-    username: string;
+    name: string;
     email: string;
+    first_name: string;
+    last_name: string
 }
 
 export default defineComponent({
@@ -42,8 +46,7 @@ export default defineComponent({
             try {
                 const response = await getAll({
                     params: {
-                        page: 1,
-                        limit: 5,   
+                        limit: 5   
                     },
                 });
                 data.value = response.data.data;

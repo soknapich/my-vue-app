@@ -1,6 +1,6 @@
 import { verifyToken } from '@/apis/authentication';
 import router from '@/router';
-import { getToken, setToken, removeAllToken } from '@/services/authentication'; // get token from cookie
+import { getToken, setToken, removeAllToken, setUserInfoCookie } from '@/services/authentication'; // get token from cookie
 
 router.beforeEach(async (to, from, next) => {
   const token = (await getToken()) || '';
@@ -9,11 +9,19 @@ router.beforeEach(async (to, from, next) => {
   if (!token && to.path != '/login') {
     next({ name: 'login' });
   } else {
-     //console.log("22 no token found, redirecting to login");
-    const resultTokenValidation = await verifyToken({
-      token
-    });
-    const isValidToken = (resultTokenValidation && resultTokenValidation.status === 200 && resultTokenValidation.data?.data) ? true : false;
+    //console.log("22 no token found, redirecting to login");
+    const resultTokenValidation = await verifyToken(
+      {
+        header: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    if (resultTokenValidation.status === 200 && resultTokenValidation.data?.id) {
+      await setUserInfoCookie(resultTokenValidation.data);
+    }
+
+    const isValidToken = (resultTokenValidation && resultTokenValidation.status === 200 && resultTokenValidation.data.id) ? true : false;
     if (!isValidToken && to.meta.requiresAuth) {
       next({ name: 'login' });
     } else if (isValidToken && to.path === '/login') {
