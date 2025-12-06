@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useLoadingStore } from '@/stores/loading';
 import APIs from '@/constants/apis';
 import { getToken, setToken } from '@/services/authentication'; // get token from cookie
 import { doRefreshToken } from '@/apis/authentication';
@@ -17,8 +18,12 @@ const service = axios.create({
 service.interceptors.request.use(
   async (config) => {
     const token = (await getToken()) || '';
-
     config.headers.Authorization = `Bearer ${token}`;
+
+    //Pinia
+    const loading = useLoadingStore();
+    loading.start();
+
     return config;
   },
   (error) => {
@@ -41,12 +46,17 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status status
    */
   async (response) => {
+    const loading = useLoadingStore();
+    loading.end();
     return response;
   },
   async (error) => {
+    const loading = useLoadingStore();
+    loading.end();
+
     if (error.response?.status === 401) {
-        return false;
-      
+      return false;
+
     } else if (error.response?.status === 403) {
       const refreshToken = (await getToken('refreshToken')) || '';
       const newTokenResult = await doRefreshToken({ refreshToken });
