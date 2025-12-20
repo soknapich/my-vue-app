@@ -3,8 +3,8 @@
   <div class="flex h-screen">
     <!-- Sidebar -->
     <aside :class="[
-        'bg-white border-r shadow-sm flex flex-col transition-all duration-200',
-        collapsed ? 'w-16' : 'w-60'
+      'bg-white border-r shadow-sm flex flex-col transition-all duration-200',
+      collapsed ? 'w-16' : 'w-60'
     ]" aria-expanded="!collapsed">
       <div class="flex items-center justify-center px-3 py-2">
         <img src="@/assets/logo.png" alt="Profile" class="w-10 h-10 rounded-full border" />
