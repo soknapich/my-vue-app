@@ -9,19 +9,13 @@ router.beforeEach(async (to, from, next) => {
   if (!token && to.path != '/login') {
     next({ name: 'login' });
   } else {
-    //console.log("22 no token found, redirecting to login");
-    const resultTokenValidation = await verifyToken(
-      {
-        header: {
-          'Authorization': `Bearer ${token}`
-        }
-      }
-    );
-    if (resultTokenValidation.status === 200 && resultTokenValidation.data?.id) {
-      await setUserInfoCookie(resultTokenValidation.data);
-    }
+     //console.log("22 no token found, redirecting to login");
+    const result = await verifyToken({
+      token
+    });
+    //console.log(result);
 
-    const isValidToken = (resultTokenValidation && resultTokenValidation.status === 200 && resultTokenValidation.data.id) ? true : false;
+    const isValidToken = (result && result.status === 200 && result.data?.id) ? true : false;
     if (!isValidToken && to.meta.requiresAuth) {
       next({ name: 'login' });
     } else if (isValidToken && to.path === '/login') {

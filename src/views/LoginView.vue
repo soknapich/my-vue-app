@@ -5,22 +5,42 @@
 
             <form @submit.prevent="handleLogin" class="space-y-4">
                 <div>
+<<<<<<< HEAD
                     <label for="email">Email</label>
                     <!-- <input v-model="email" type="email" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter your email" /> -->
                     <InputText id="email" v-model="email" size="small" aria-describedby="username-help" fluid/>
                 </div>
+=======
+                    <label class="block text-gray-700 font-semibold mb-2">Email or Username</label>
+                    <InputGroup>
+                        <InputText type="username" size="small" v-model="username" placeholder="Enter your email or username"
+                            class="w-full" />
+                        <InputGroupAddon>
+                            <i class="pi pi-user"></i>
+                        </InputGroupAddon>
+>>>>>>> ccc220248354705814812fbb9953d29587c36ada
 
+                    </InputGroup>
+
+                </div>
                 <div>
+<<<<<<< HEAD
                     <label for="password">Password</label>
                     <Password id="password" v-model="password" size="small" toggleMask :feedback="false" fluid />
+=======
+                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <InputGroup>
+                        <InputText :type="showPassword ? 'text' : 'password'" size="small" v-model="password" placeholder="Enter your password"
+                            class="w-full" />
+                        <InputGroupAddon>
+                            <Button type="button" size="small" :icon="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"  severity="secondary" @click="togglePassword" />
+                        </InputGroupAddon>
+                    </InputGroup>
+>>>>>>> ccc220248354705814812fbb9953d29587c36ada
                 </div>
-
-                <button type="submit"
-                    class="w-full bg-green-700 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
-                    Sign In
-                </button>
+                <Button type="submit" size="small" label="Sign In" class="w-full p-mb-4" />
             </form>
 
             <p class="text-center text-gray-600 mt-4">
@@ -29,6 +49,11 @@
             </p>
         </div>
     </div>
+
+    <LoadingDialog v-model="showLoading" title="Signing in..." />
+    <AlertDialog v-model="showAlert" yesButtonColor="bg-red-600" header="Error"
+        title="Login failed. wrong email or password!" :show-cancel="true" />
+
 </template>
 
 <script setup>
@@ -36,24 +61,45 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { signin } from "@/apis/authentication";
 import { setToken, setUserInfoCookie } from '@/services/authentication';
+<<<<<<< HEAD
 import { InputText, Password } from 'primevue';
+=======
+import LoadingDialog from '@/components/LoadingDialog.vue';
+import AlertDialog from '../components/AlertDialog.vue';
+import { Button, InputGroup, InputGroupAddon, InputText } from 'primevue';
+
+const showLoading = ref(false);
+const showAlert = ref(false);
+const showPassword = ref(false);
+>>>>>>> ccc220248354705814812fbb9953d29587c36ada
 
 const router = useRouter();
-const email = ref('')
-const password = ref('')
+const username = ref('');
+const password = ref('');
+
+const togglePassword = () => {
+    showPassword.value = !showPassword.value;
+}
 
 const handleLogin = async () => {
+    showLoading.value = true;
     const result = await signin({
+<<<<<<< HEAD
         //grant_type: 'password',
         username: email.value,
         password: password.value,
         //client_id: 5,
         //client_secret: 'wUV6ftjHDZHu290UMqCvlcEqNcmvdGVCwAqjr6Ml',
         //scope: '*'
+=======
+        username: username.value,
+        password: password.value
+>>>>>>> ccc220248354705814812fbb9953d29587c36ada
     });
 
 
     if (result && result.status === 200) {
+<<<<<<< HEAD
         console.log(result);
 
         await setToken('token', result.data?.access_token)
@@ -66,7 +112,19 @@ const handleLogin = async () => {
         router.push({ path: '/' });
     } else {
         alert('Login failed. Please check your credentials and try again.');
+=======
+        
+        await setToken('token', result.data?.access_token)
+        await setToken('refreshToken', result.data?.refresh_token);
+        await setUserInfoCookie(result.data?.user);
+
+        router.push({ path: '/' });
+    } else {
+        showAlert.value = true;
+        //alert('Login failed. Please check your credentials and try again.');
+>>>>>>> ccc220248354705814812fbb9953d29587c36ada
     }
+    showLoading.value = false;
 
 
 }
