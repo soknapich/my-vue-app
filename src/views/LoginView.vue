@@ -5,9 +5,9 @@
 
             <form @submit.prevent="handleLogin" class="space-y-4">
                 <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <label class="block text-gray-700 font-semibold mb-2">Email or Username</label>
                     <InputGroup>
-                        <InputText type="email" size="small" v-model="email" placeholder="Enter your email"
+                        <InputText type="username" size="small" v-model="username" placeholder="Enter your email or username"
                             class="w-full" />
                         <InputGroupAddon>
                             <i class="pi pi-user"></i>
@@ -56,7 +56,7 @@ const showAlert = ref(false);
 const showPassword = ref(false);
 
 const router = useRouter();
-const email = ref('');
+const username = ref('');
 const password = ref('');
 
 const togglePassword = () => {
@@ -66,14 +66,15 @@ const togglePassword = () => {
 const handleLogin = async () => {
     showLoading.value = true;
     const result = await signin({
-        email: email.value,
+        username: username.value,
         password: password.value
     });
 
 
     if (result && result.status === 200) {
-        await setToken('token', result.data?.token)
-        await setToken('refreshToken', result.data?.refreshToken);
+        
+        await setToken('token', result.data?.access_token)
+        await setToken('refreshToken', result.data?.refresh_token);
         await setUserInfoCookie(result.data?.user);
 
         router.push({ path: '/' });

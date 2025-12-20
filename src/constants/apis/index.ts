@@ -33,15 +33,15 @@ interface ApiConfig {
 const APIs: ApiConfig = {
   authentication: {
     signin: {
-      url: 'auth/login',
+      url: 'login',
       method: 'post',
     },
     verifyToken: {
-      url: 'auth/verifyToken',
+      url: 'verify-token',
       method: 'post',
     },
     refreshToken: {
-      url: 'auth/refreshToken',
+      url: 'refresh-token',
       method: 'post',
     },
     verifyWebpage: {
@@ -51,19 +51,19 @@ const APIs: ApiConfig = {
   },
   user: {
     createUser: {
-      url: 'users',
+      url: 'user',
       method: 'post',
     },
     updateUser: {
-      url: 'users',
+      url: 'user',
       method: 'put',
     },
     getAllUser: {
-      url: 'users',
+      url: 'user',
       method: 'get',
     },
     getOneUser: {
-      url: 'users',
+      url: 'user',
       method: 'get',
     },
   }

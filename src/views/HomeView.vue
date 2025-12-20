@@ -4,15 +4,15 @@
         <DataTable :value="data" stripedRows size="small" tableStyle="min-width: 50rem">
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column field="id" header="ID" sortable style="width: 5%"></Column>
-            <Column field="username" header="Name" sortable></Column>
+            <Column field="name" header="Name" sortable></Column>
             <Column field="email" header="Email" sortable></Column>
         </DataTable>
     </div>
 
-    <div>
+    <!-- <div>
         <Tree v-model:selectionKeys="selectedKey" :value="nodes" selectionMode="single" @nodeSelect="onNodeSelect"
             :metaKeySelection="false" :propagateSelectionDown="true" />
-    </div>
+    </div> -->
 
 </template>
 
@@ -26,7 +26,7 @@ import { Tree } from "primevue";
 
 interface User {
     id: number;
-    username: string;
+    name: string;
     email: string;
 }
 
@@ -45,11 +45,12 @@ export default defineComponent({
                 const response = await getAll({
                     params: {
                         page: 1,
-                        limit: 5,
+                        limit: 20,
                     },
                 });
-                data.value = response.data.data;
-                //console.log(response.data.data);
+                const result = response.data.data;
+                data.value = result.data;
+                //console.log(response.data.data.data);
             } catch (error) {
                 console.error("Failed to data:", error);
             }
