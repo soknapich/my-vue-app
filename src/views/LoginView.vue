@@ -44,12 +44,12 @@ const password = ref('')
 
 const handleLogin = async () => {
     const result = await signin({
-        grant_type: 'password',
+        //grant_type: 'password',
         username: email.value,
         password: password.value,
-        client_id: 5,
-        client_secret: 'wUV6ftjHDZHu290UMqCvlcEqNcmvdGVCwAqjr6Ml',
-        scope: '*'
+        //client_id: 5,
+        //client_secret: 'wUV6ftjHDZHu290UMqCvlcEqNcmvdGVCwAqjr6Ml',
+        //scope: '*'
     });
 
 

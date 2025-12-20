@@ -10,7 +10,7 @@ const whiteListReturnError = [
 ];
 // create an axios instance
 const service = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_API || 'http://localhost:8000', // url = base url + request url
+  baseURL: import.meta.env.VITE_APP_BASE_API || 'http://localhost:8000/api/v1', // url = base url + request url
   timeout: 1000000 //(1000000ms) request timeout = 16 minutes 40 seconds.
 });
 

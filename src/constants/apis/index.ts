@@ -20,52 +20,59 @@ interface User {
 }
 
 
-interface ChartOfAccount {
+interface Plan {
   getAll: ApiAction;
-  syncAll: ApiAction;
 }
 
 interface ApiConfig {
   authentication: Authentication;
   user: User;
+  plan: Plan
 }
 
 const APIs: ApiConfig = {
   authentication: {
     signin: {
-      url: 'oauth/token',
+      url: 'login',
       method: 'post',
     },
     verifyToken: {
-      url: 'api/verify_token',
+      url: 'verify-token',
       method: 'post',
     },
     refreshToken: {
-      url: 'oauth/token',
+      url: 'refresh-token',
       method: 'post',
     },
     verifyWebpage: {
-      url: 'authentication/verify-webpage',
+      url: 'verify-webpage',
       method: 'post',
     }
   },
   user: {
     createUser: {
-      url: 'api/user',
+      url: 'user',
       method: 'post',
     },
     updateUser: {
-      url: 'api/user',
+      url: 'user',
       method: 'put',
     },
     getAllUser: {
-      url: 'api/user',
+      url: 'user',
       method: 'get',
     },
     getOneUser: {
-      url: 'api/user',
+      url: 'user',
       method: 'get',
     },
+  },
+  plan: {
+    getAll: {
+      url: 'plan',
+      method: 'get',
+    }
+
   }
 };
 

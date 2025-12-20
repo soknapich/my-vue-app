@@ -49,8 +49,8 @@ export default defineComponent({
                         limit: 5   
                     },
                 });
-                data.value = response.data.data;
-                //console.log(response.data.data);
+                const result = response.data.data;
+                data.value = result.data;
             } catch (error) {
                 console.error("Failed to data:", error);
             }

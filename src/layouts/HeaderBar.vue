@@ -1,8 +1,12 @@
 <template>
   <header class="flex items-center justify-between px-2 py-2 bg-white shadow">
     <!-- Left: Page Title -->
-    <div>
-      <h1 class="text-xl font-semibold text-gray-800">{{ title }}</h1>
+    <div class="flex">
+      <button @click="toggle" class="p-1 rounded hover:bg-gray-100"
+        :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+        <component :is="collapsed ? Menu : Menu" class="w-5 h-5 text-gray-600" />
+      </button>
+      <h1 class="text-xl font-semibold text-gray-800 ml-2">{{ title }}</h1>
     </div>
 
     <!-- Right: Breadcrumb + Profile -->
@@ -20,7 +24,8 @@
       <!-- Profile with Dropdown -->
       <div class="relative">
         <button @click="toggleDropdown" class="focus:outline-none hover:cursor-pointer">
-          <img src="@/assets/vue.svg" alt="Profile" class="w-10 h-10 rounded-full border" />
+          <!-- <img src="@/assets/vue.svg" alt="Profile" class="w-10 h-10 rounded-full border" /> -->
+            <UserRound size="32" color="#555" class="rounded-full border"/>
         </button>
 
         <!-- Dropdown Menu -->
@@ -32,8 +37,8 @@
         </div>
       </div>
     </div>
-    <ConfirmationAlert v-model="showLogoutConfirm" confirmationLabel="Logout" cancelLabel="Cancel"
-      :onConfirm="logout" confirmationButtonColor="bg-red-600" />
+    <ConfirmationAlert v-model="showLogoutConfirm" confirmationLabel="Logout" cancelLabel="Cancel" :onConfirm="logout"
+      confirmationButtonColor="bg-red-600" />
 
     <!-- <LoadingDialog v-model="showLogoutConfirm" title="Working on it..." /> -->
     <!-- <AlertDialog v-model="showLogoutConfirm" title="Logging out" cancelLabel="Cancel" :showCancel="true" /> -->
@@ -48,15 +53,25 @@ import { setToken, setUserInfoCookie } from '@/services/authentication';
 import ConfirmationAlert from '@/components/ConfirmationAlert.vue';
 import AlertDialog from '@/components/AlertDialog.vue';
 import LoadingDialog from '@/components/LoadingDialog.vue';
+import { Menu, UserRound  } from "lucide-vue-next";
+const emit = defineEmits(['toggleNav']);
 
 const router = useRouter();
+
 defineProps<{
   title: string
   breadcrumbs: string[]
 }>();
 
-const showDropdown = ref(false)
-const showLogoutConfirm = ref(false)
+
+const showDropdown = ref(false);
+const showLogoutConfirm = ref(false);
+
+const collapsed = ref(false);
+const toggle = () => {
+  collapsed.value = !collapsed.value;
+  emit('toggleNav');
+};
 
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value
@@ -67,7 +82,7 @@ const logout = async () => {
   showLogoutConfirm.value = false
   // 🔐 Perform logout logic here (e.g., clear token, redirect)
   console.log('Logging out...');
-  await setToken('token','')
+  await setToken('token', '')
   await setToken('refreshToken', '');
   await setUserInfoCookie('');
 
