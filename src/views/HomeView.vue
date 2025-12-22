@@ -1,33 +1,12 @@
 <template>
     <!-- Sidebar -->
     <div class="overflow-x-auto">
-<<<<<<< HEAD
-        <table class="min-w-full border-collapse border border-gray-300">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="border border-gray-300 px-2 py-1 text-left">ID</th>
-                    <th class="border border-gray-300 px-2 py-1 text-left">Full Name</th>
-                    <th class="border border-gray-300 px-2 py-1 text-left">Login Name</th>
-                    <th class="border border-gray-300 px-2 py-1 text-left">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="user in data" :key="user.id" class="hover:bg-gray-50">
-                    <td class="border border-gray-300 px-2 py-1">{{ user.id }}</td>
-                     <td class="border border-gray-300 px-2 py-1">{{ `${user.first_name} ${user.last_name}` }}</td>
-                    <td class="border border-gray-300 px-2 py-1">{{ user.name }}</td>
-                    <td class="border border-gray-300 px-2 py-1">{{ user.email }}</td>
-                </tr>
-            </tbody>
-        </table>
-=======
         <DataTable :value="data" stripedRows size="small" tableStyle="min-width: 50rem">
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column field="id" header="ID" sortable style="width: 5%"></Column>
             <Column field="name" header="Name" sortable></Column>
             <Column field="email" header="Email" sortable></Column>
         </DataTable>
->>>>>>> ccc220248354705814812fbb9953d29587c36ada
     </div>
 
     <!-- <div>
@@ -67,20 +46,13 @@ export default defineComponent({
             try {
                 const response = await getAll({
                     params: {
-<<<<<<< HEAD
-                        limit: 5   
-=======
                         page: 1,
                         limit: 20,
->>>>>>> ccc220248354705814812fbb9953d29587c36ada
                     },
                 });
                 const result = response.data.data;
                 data.value = result.data;
-<<<<<<< HEAD
-=======
                 //console.log(response.data.data.data);
->>>>>>> ccc220248354705814812fbb9953d29587c36ada
             } catch (error) {
                 console.error("Failed to data:", error);
             }
