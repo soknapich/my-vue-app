@@ -11,6 +11,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
      //console.log("22 no token found, redirecting to login");
     const result = await verifyToken({
+      concept: 'BOQ',
       token
     });
     //console.log(result);

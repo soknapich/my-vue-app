@@ -55,7 +55,8 @@ const route = useRoute();
 
 const menuItems = [
   { name: "Home", to: "/", icon: LayoutDashboard },
-  { name: "Product", to: "/product", icon: TableProperties },
+  { name: "Estimate", to: "/estimate", icon: TableProperties },
+  { name: "Actual", to: "/actual", icon: LayoutDashboard },
   { name: "Setting", to: "/setting", icon: Settings },
 ];
 

@@ -4,11 +4,17 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import  'primeicons/primeicons.css';   // <-- Correct path
 
+import { createPinia } from 'pinia';
+
 import "@/assets/main.css";
 import router from '@/router';
 import '@/services/navigation-guard';
 
 const app = createApp(App);
+// 1️⃣ Create Pinia instance
+const pinia = createPinia();
+// 2️⃣ Install Pinia
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue, {
     theme: {
