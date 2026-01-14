@@ -3,7 +3,6 @@ import App from '@/App.vue';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import  'primeicons/primeicons.css';   // <-- Correct path
-
 import { createPinia } from 'pinia';
 
 import "@/assets/main.css";

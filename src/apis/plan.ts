@@ -8,3 +8,27 @@ export function getAll(data: any) {
     params: data.params
   });
 }
+
+export function getNext(url: string, data: any) {
+  return request({
+    url: url,
+    method: 'get',
+    params: data.params
+  });
+}
+
+export function createItem(data: any) {
+  return request({
+    url: APIs.boqItem.createBoqItem.url,
+    method: APIs.boqItem.createBoqItem.method,
+    params: data.params
+  });
+}
+
+export function deletItem(id:any) {
+  return request({
+    url: `${APIs.boqItem.deleteBoqItem.url}/${id}`,
+    method: APIs.boqItem.deleteBoqItem.method
+  });
+}
+

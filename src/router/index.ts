@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue';
 import ActualView from '@/views/ActualView.vue';
 import LoginView from '@/views/LoginView.vue';
 import EstimateView from '@/views/EstimateView.vue';
+import SettingView from '@/views/SettingView.vue';
 
 const routes = [
   {
@@ -35,6 +36,14 @@ const routes = [
         path: '/actual',
         name: 'actual',
         component: ActualView,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/setting',
+        name: 'setting',
+        component: SettingView,
         meta: {
           requiresAuth: true
         }

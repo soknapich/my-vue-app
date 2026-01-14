@@ -1,4 +1,4 @@
-type HttpMethod = 'get' | 'post' | 'patch' | 'put';
+type HttpMethod = 'get' | 'post' | 'patch' | 'put' | 'delete';
 
 interface ApiAction {
   url: string;
@@ -19,15 +19,37 @@ interface User {
   getOneUser: ApiAction;
 }
 
-
 interface Plan {
   getAll: ApiAction;
 }
 
+interface BoqLevel1 {
+  getAll: ApiAction;
+  createBoqLevel1: ApiAction;
+  updateBoqLevel1: ApiAction;
+  getOneBoqLevel1: ApiAction;
+}
+
+interface BoqLevel2 {
+  getAll: ApiAction;
+  createBoqLevel2: ApiAction;
+  updateBoqLevel2: ApiAction;
+  getOneBoqLevel2: ApiAction;
+}
+
+interface BoqItem {
+  createBoqItem: ApiAction;
+  deleteBoqItem: ApiAction;
+}
+
+
 interface ApiConfig {
   authentication: Authentication;
   user: User;
-  plan: Plan
+  plan: Plan,
+  boqLevel1: BoqLevel1,
+  boqLevel2: BoqLevel2,
+  boqItem: BoqItem
 }
 
 const APIs: ApiConfig = {
@@ -72,8 +94,55 @@ const APIs: ApiConfig = {
       url: 'plan',
       method: 'get',
     }
+  },
+  boqLevel1: {
+    getAll: {
+      url: 'boq-level-one',
+      method: 'get',
+    },
+    createBoqLevel1: {
+      url: 'boq-level-one',
+      method: 'post',
+    },
+    updateBoqLevel1: {
+      url: 'boq-level-one',
+      method: 'put',
+    },
+    getOneBoqLevel1: {
+      url: 'boq-level-one',
+      method: 'get',
+    }
+  },
 
+  boqLevel2: {
+    getAll: {
+      url: 'boq-level-two',
+      method: 'get',
+    },
+    createBoqLevel2: {
+      url: 'boq-level-two',
+      method: 'post',
+    },
+    updateBoqLevel2: {
+      url: 'boq-level-two',
+      method: 'put',
+    },
+    getOneBoqLevel2: {
+      url: 'boq-level-two',
+      method: 'get',
+    }
+  },
+  boqItem:{
+    createBoqItem: {
+      url: 'boq-item',
+      method: 'post'
+    },
+    deleteBoqItem: {
+      url: 'boq-item',
+      method: 'delete'
+    }
   }
+
 };
 
 export default APIs;
