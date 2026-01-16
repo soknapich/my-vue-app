@@ -16,3 +16,18 @@ export function createBoqLevel2(data: any) {
     params: data.params
   });
 }
+
+export function updateBoqLevel2(id:any, data: any) {
+  return request({
+    url: `${APIs.boqLevel2.updateBoqLevel2.url}/${id}`,
+    method: APIs.boqLevel2.updateBoqLevel2.method,
+    params: data.params
+  });
+}
+
+export function deletBoqLevel2(id: any) {
+  return request({
+    url: `${APIs.boqLevel2.deleteBoqLevel2.url}/${id}`,
+    method: APIs.boqLevel2.deleteBoqLevel2.method,
+  });
+}

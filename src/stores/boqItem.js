@@ -1,10 +1,11 @@
 // stores/loading.js
 import { defineStore } from "pinia";
-import { getNext, createItem, deletItem } from "@/apis/plan";
+import { getNext, createItem, updateItem, deletItem } from "@/apis/plan";
 
 export const useBoqItemStore = defineStore("boqItem", {
   state: () => ({
     selected: null,
+    errors: [],
     items: [],
   }),
   actions: {
@@ -16,6 +17,7 @@ export const useBoqItemStore = defineStore("boqItem", {
           order_by: "desc",
         },
       });
+
       if (response.data.status) {
         const result = response.data.data;
         this.items = result;
@@ -23,12 +25,28 @@ export const useBoqItemStore = defineStore("boqItem", {
     },
 
     async create(data) {
-      //console.log(data);
       const response = await createItem({
         params: data,
+      }).catch((error) => {
+        this.errors = error.response.data.errors;
       });
 
-      if (response.data?.status) {
+      if (response?.data?.status) {
+        this.errors = [];
+        await this.getAll(data.level_id);
+      }
+    },
+
+    async update(data) {
+     // alert(data);
+      const response = await updateItem(data.id, {
+        params: data,
+      }).catch((error) => {
+        this.errors = error.response.data.errors;
+      });
+
+      if (response?.data?.status) {
+        this.errors = [];
         await this.getAll(data.level_id);
       }
     },

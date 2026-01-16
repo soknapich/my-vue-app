@@ -9,10 +9,25 @@ export function getBoqLevel1All(data: any) {
   });
 }
 
+export function updateBoqLevel1(id:any, data: any) {
+  return request({
+    url: `${APIs.boqLevel1.updateBoqLevel1.url}/${id}`,
+    method: APIs.boqLevel1.updateBoqLevel1.method,
+    params: data.params
+  });
+}
+
+
 export function createBoqLevel1(data: any) {
   return request({
     url: APIs.boqLevel1.createBoqLevel1.url,
     method: APIs.boqLevel1.createBoqLevel1.method,
     params: data.params
+  });
+}
+export function deletBoqLevel1(id: any) {
+  return request({
+    url: `${APIs.boqLevel1.deleteBoqLevel1.url}/${id}`,
+    method: APIs.boqLevel1.deleteBoqLevel1.method,
   });
 }

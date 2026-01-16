@@ -2,7 +2,8 @@
     <div class="card mb-2">
         <div class="grid grid-cols-12 gap-1">
             <div class="col-span-6">
-                <Select v-model="selectedPlan" :options="plans" filter optionLabel="name" size="small"
+                <label for="plan" class="font-semibold">គម្រោង <span class="text-red-500">*</span></label>
+                <Select id="plan" v-model="selectedPlan" :options="plans" filter optionLabel="name" size="small"
                     placeholder="Select a Plan" class="w-full" @update:modelValue="onPlanChange">
                     <template #value="slotProps">
                         <div v-if="slotProps.value" class="flex items-center">
@@ -20,7 +21,8 @@
                 </Select>
             </div>
             <div class="col-span-6">
-                <Select v-model="selectedHouse" :options="houses" filter optionLabel="name" size="small"
+                <label for="house-no" class="font-semibold">លេខផ្ទះ <span class="text-red-500">*</span></label>
+                <Select id="house-no" v-model="selectedHouse" :options="houses" filter optionLabel="name" size="small"
                     placeholder="Select a House" class="w-full" @update:modelValue="onHouseChange">
                     <template #value="slotProps">
                         <div v-if="slotProps.value" class="flex items-center">
@@ -43,14 +45,20 @@
 
     <div class="card">
         <div class="grid grid-cols-12 gap-1">
-            <div class="col-span-6" style="height: 350px;">
+            <div class="col-span-6">
+                <div class="bg-white text-gray-800 rounded-lg shadow p-2" style="height: 350px;">
                 <BoqLevelOne />
+                </div>
             </div>
-            <div class="col-span-6" style="height: 350px;">
-                <BoqLevelTwo/>
+            <div class="col-span-6">
+                <div class="bg-white text-gray-800 rounded-lg shadow p-2" style="height: 350px;">
+                <BoqLevelTwo />
+                </div>
             </div>
-            <div class="col-span-12">
-                <BoqItem/>
+            <div class="col-span-12 " >
+                <div class="bg-white text-gray-800 rounded-lg shadow p-2" style="height: 400px;">
+                    <BoqItem />
+                </div>
             </div>
         </div>
     </div>
@@ -102,6 +110,7 @@ const onPlanChange = async (value) => {
 const onHouseChange = async (value) => {
     levelTwoStore.items = [];
     boqItemStore.items = [];
+    levelOneStore.houseId = value.id;
     await levelOneStore.getAll(value.id);
 };
 

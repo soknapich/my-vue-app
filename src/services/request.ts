@@ -65,6 +65,8 @@ service.interceptors.response.use(
         await setToken('token', newTokenResult.data.token);
         await setToken('refreshToken', newTokenResult.data.refreshToken);
       }
+    } else if(error.response?.status === 422){
+      return Promise.reject(error);
     } else {
       /**
        * Show Error Alert Message
