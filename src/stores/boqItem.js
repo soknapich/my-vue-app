@@ -1,6 +1,6 @@
 // stores/loading.js
 import { defineStore } from "pinia";
-import { getNext, createItem, updateItem, deletItem } from "@/apis/plan";
+import { getNext, createItem, updateItem, deletItem, copyItem } from "@/apis/plan";
 
 export const useBoqItemStore = defineStore("boqItem", {
   state: () => ({
@@ -38,7 +38,7 @@ export const useBoqItemStore = defineStore("boqItem", {
     },
 
     async update(data) {
-     // alert(data);
+      // alert(data);
       const response = await updateItem(data.id, {
         params: data,
       }).catch((error) => {
@@ -56,5 +56,11 @@ export const useBoqItemStore = defineStore("boqItem", {
       // refresh list AFTER delete
       await this.getAll(parent_id);
     },
+
+    async copyItem(id, parent_id) {
+      await copyItem(id);
+      await this.getAll(parent_id);
+    }
+
   },
 });

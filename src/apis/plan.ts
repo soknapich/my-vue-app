@@ -39,3 +39,10 @@ export function deletItem(id: any) {
     method: APIs.boqItem.deleteBoqItem.method,
   });
 }
+
+export function copyItem(id: any) {
+  return request({
+    url: `${APIs.boqItem.copyBoqItem.url}/${id}`,
+    method: APIs.boqItem.copyBoqItem.method,
+  });
+}

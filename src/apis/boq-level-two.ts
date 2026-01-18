@@ -31,3 +31,11 @@ export function deletBoqLevel2(id: any) {
     method: APIs.boqLevel2.deleteBoqLevel2.method,
   });
 }
+
+export function copyBoqLevel2(id: any) {
+  return request({
+    url: `${APIs.boqLevel2.copyBoqLevel2.url}/${id}`,
+    method: APIs.boqLevel2.copyBoqLevel2.method,
+  });
+}
+

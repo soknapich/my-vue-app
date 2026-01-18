@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="flex flex-column justify-end" v-if="levelOneStore.houseId">
+        <div class="flex flex-column justify-end gap-2" v-if="levelOneStore.houseId">
+         
             <Button icon="pi pi-plus" rounded size="small" @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -8,6 +9,11 @@
             v-model:contextMenuSelection="selectedItem" @rowContextmenu="onRowContextMenu" scrollable
             scrollHeight="300px" selectionMode="single" :value="levelOneStore.items" size="small"
             v-if="levelOneStore.items?.length > 0">
+            <Column style="width:50px">
+                <template #body="{ index }">
+                    {{ index + 1 }}
+                </template>
+            </Column>
             <Column field="title"></Column>
             <Column field="count"></Column>
         </DataTable>
@@ -64,12 +70,14 @@ const selectedItem = ref();
 
 const menuModel = ref([
     { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) },
+    { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) },
     { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) },
+    { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) },
     { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) }
 ]);
 
 const openModal = (isNew) => {
-    
+
     if (isNew) {
         dataItem = {
             id: 0,
@@ -85,8 +93,21 @@ const openModal = (isNew) => {
 const onRowContextMenu = (event) => {
     cm.value.show(event.originalEvent);
 };
+
 const newBoqContext = async (row) => {
     openModal(true);
+};
+
+const copyBoqContext = async (row) => {
+    //alert('Under contruction: ' + row.value.id);
+    const result = confirm("Confirm copy!");
+    if (result) {
+        await levelOneStore.copyItem(row.value.id, row.value.house_id);
+    }
+};
+
+const refreshBoqContext = async (row) =>{
+    await levelOneStore.getAll(row.value.house_id);
 };
 
 const deleteBoqContext = async (row) => {
@@ -121,9 +142,10 @@ const submitForm = async () => {
     } else {
         await levelOneStore.create(dataItem);
     }
-    
+
     if (levelOneStore.errors.length == 0) {
         visibleBtn.value = false;
     }
 };
+
 </script>

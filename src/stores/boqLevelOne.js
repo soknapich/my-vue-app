@@ -1,7 +1,12 @@
 // stores/loading.js
 import { defineStore } from "pinia";
 import { getNext } from "@/apis/plan";
-import {createBoqLevel1, updateBoqLevel1, deletBoqLevel1 } from "@/apis/boq-level-one";
+import {
+  createBoqLevel1,
+  updateBoqLevel1,
+  deletBoqLevel1,
+  copyBoqLevel1
+} from "@/apis/boq-level-one";
 
 export const useLevelOneStore = defineStore("boqLevelOne", {
   state: () => ({
@@ -11,6 +16,7 @@ export const useLevelOneStore = defineStore("boqLevelOne", {
     items: [],
   }),
   actions: {
+
     async getAll(id) {
       const response = await getNext(`/boq-level-one?house_id=${id}`, {
         params: {
@@ -59,5 +65,10 @@ export const useLevelOneStore = defineStore("boqLevelOne", {
       await this.getAll(parent_id);
     },
     
+    async copyItem(id, parent_id) {
+      await copyBoqLevel1(id);
+      // refresh list AFTER delete
+      await this.getAll(parent_id);
+    },
   },
 });

@@ -8,12 +8,16 @@
         <DataTable scrollHeight="350px" scrollable contextMenu v-model:contextMenuSelection="selectedItem"
             @rowContextmenu="onRowContextMenu" selectionMode="single" :value="boqItem.items" size="small"
             v-if="boqItem.items?.length > 0">
-
-            <Column field="id"></Column>
+            <Column header="#" style="width:50px">
+                <template #body="{ index }">
+                    {{ index + 1 }}
+                </template>
+            </Column>
             <Column field="title" header="Title"></Column>
             <Column field="spec" header="Spec"></Column>
             <Column field="brand" header="Brand"></Column>
             <Column field="size" header="Size"></Column>
+            <Column field="unit" header="Unit"></Column>
             <Column field="qty" header="Qty"></Column>
             <Column field="material_unit" header="Material_Unit_Rate"></Column>
             <Column field="labor_unit" header="Labor_Unit_Rate"></Column>
@@ -44,6 +48,12 @@
                     <label for="size" class="font-semibold">Size <span class="text-red-500">*</span></label>
                     <InputText id="size" v-model="dataItem.size" size="small" class="flex-auto" autocomplete="off" />
                     <span class="text-red-500">{{ boqItem.errors.size?.[0] }}</span>
+                </div>
+                <div class="flex flex-col gap-2 mt-2">
+                    <label for="unit" class="font-semibold">Unit <span class="text-red-500">*</span></label>
+                    <InputText id="unit" v-model="dataItem.unit" size="small" class="flex-auto" autocomplete="off"
+                        fluid />
+                    <span class="text-red-500">{{ boqItem.errors.unit?.[0] }}</span>
                 </div>
                 <div class="flex flex-col gap-2 mt-2">
                     <label for="qty" class="font-semibold">Qty <span class="text-red-500">*</span></label>
@@ -98,6 +108,7 @@ let dataItem = ref({
     title: '',
     spec: '',
     brand: '',
+    unit: '',
     size: '',
     qty: '',
     material_unit: '',
@@ -112,7 +123,9 @@ const selectedItem = ref();
 
 const menuModel = ref([
     { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) },
+    { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) },
     { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) },
+    { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) },
     { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) }
 ]);
 
@@ -124,6 +137,7 @@ const clearData = () => {
         spec: '',
         brand: '',
         size: '',
+        unit: '',
         qty: '',
         material_unit: '',
         labor_unit: ''
@@ -138,6 +152,18 @@ const onRowContextMenu = (event) => {
 
 const newBoqContext = async (row) => {
     clearData();
+};
+
+const copyBoqContext = async (row) => {
+    //alert('Under contruction: ' + row.value.id);\
+    const result = confirm("Confirm copy!");
+    if (result) {
+        await boqItem.copyItem(row.value.id, row.value.parent_id);
+    }
+};
+
+const refreshBoqContext = async (row) => {
+    await boqItem.getAll(row.value.parent_id);
 };
 
 const deleteBoqContext = async (row) => {
@@ -157,6 +183,7 @@ const editBoqContext = (row) => {
             title: result.title,
             spec: result.spec,
             brand: result.brand,
+            unit: result.unit,
             size: result.size,
             qty: result.qty,
             material_unit: result.material_unit,

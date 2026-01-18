@@ -29,6 +29,7 @@ interface BoqLevel1 {
   updateBoqLevel1: ApiAction;
   getOneBoqLevel1: ApiAction;
   deleteBoqLevel1: ApiAction;
+  copyBoqLevel1: ApiAction;
 }
 
 interface BoqLevel2 {
@@ -37,12 +38,14 @@ interface BoqLevel2 {
   updateBoqLevel2: ApiAction;
   getOneBoqLevel2: ApiAction;
   deleteBoqLevel2: ApiAction;
+  copyBoqLevel2: ApiAction
 }
 
 interface BoqItem {
   createBoqItem: ApiAction;
   updateBoqItem: ApiAction;
   deleteBoqItem: ApiAction;
+  copyBoqItem: ApiAction;
 }
 
 
@@ -74,6 +77,7 @@ const APIs: ApiConfig = {
       method: 'post',
     }
   },
+  
   user: {
     createUser: {
       url: 'user',
@@ -92,12 +96,14 @@ const APIs: ApiConfig = {
       method: 'get',
     },
   },
+
   plan: {
     getAll: {
       url: 'plan',
       method: 'get',
     }
   },
+
   boqLevel1: {
     getAll: {
       url: 'boq-level-one',
@@ -118,8 +124,13 @@ const APIs: ApiConfig = {
     deleteBoqLevel1: {
       url: 'boq-level-one',
       method: 'delete'
+    },
+    copyBoqLevel1: {
+      url: 'boq-level-one',
+      method: 'patch'
     }
   },
+  
   boqLevel2: {
     getAll: {
       url: 'boq-level-two',
@@ -137,11 +148,16 @@ const APIs: ApiConfig = {
       url: 'boq-level-two',
       method: 'delete'
     },
+    copyBoqLevel2: {
+      url: 'boq-level-two',
+      method: 'patch'
+    },
     getOneBoqLevel2: {
       url: 'boq-level-two',
       method: 'get',
     }
   },
+
   boqItem:{
     createBoqItem: {
       url: 'boq-item',
@@ -154,6 +170,10 @@ const APIs: ApiConfig = {
     deleteBoqItem: {
       url: 'boq-item',
       method: 'delete'
+    },
+    copyBoqItem: {
+      url: 'boq-item',
+      method: 'patch'
     }
   }
 
