@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex flex-column justify-end">
+        <div class="flex flex-column justify-end" v-if="levelOneStore.selected">
             <Button icon="pi pi-plus" rounded size="small" @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -44,9 +44,11 @@ import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import ContextMenu from 'primevue/contextmenu';
 import Dialog from 'primevue/dialog';
+import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';
 
+const levelOneStore = useLevelOneStore();
 const boqTwoStore = useLevelTwoStore();
 const boqItem = useBoqItemStore();
 

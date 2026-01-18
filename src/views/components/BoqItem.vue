@@ -176,7 +176,7 @@ const submitForm = async () => {
         //console.log(dataItem);
         await boqItem.update(dataItem);
     } else {
-        await boqItem.create({ ...dataItem.value, level_id: boqTwoStore.selected.id });
+        await boqItem.create({ ...dataItem, level_id: boqTwoStore.selected.id });
     }
 
     if (boqItem.errors.length == 0) {

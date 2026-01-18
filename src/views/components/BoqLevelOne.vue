@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex flex-column justify-end">
+        <div class="flex flex-column justify-end" v-if="levelOneStore.houseId">
             <Button icon="pi pi-plus" rounded size="small" @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />

@@ -4,13 +4,13 @@
         <div class="card">
             <TreeTable :value="nodes" lazy size="small" @node-expand="onNodeExpand" selectionMode="single"
                 tableStyle="min-width: 50rem">
-                <Column field="name" header="បរិយាយ" expander style="width: 40%">
+                <Column field="title" header="បរិយាយ" expander style="width: 40%">
                     <template #body="{ node }">
                         <div class="flex align-items-center gap-1">
                             <!-- Icon -->
                             <i :class='node.icon' class="text-success"></i>
                             <!-- Text -->
-                            <small>{{ node.data.name }}</small>
+                            <small>{{ node.data.title }}</small>
                         </div>
                     </template>
                 </Column>
