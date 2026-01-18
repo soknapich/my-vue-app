@@ -1,13 +1,13 @@
 <template>
     <div class="card mb-2">
         <div class="grid grid-cols-12 gap-1">
-            <div class="col-span-6">
+            <div class="col-span-12 md:col-span-6">
                 <label for="plan" class="font-semibold">គម្រោង <span class="text-red-500">*</span></label>
                 <Select id="plan" v-model="selectedPlan" :options="plans" filter optionLabel="name" size="small"
                     placeholder="Select a Plan" class="w-full" @update:modelValue="onPlanChange">
                     <template #value="slotProps">
                         <div v-if="slotProps.value" class="flex items-center">
-                            <div>{{ slotProps.value.name }}</div>
+                            <div>{{ plans.findIndex(h => h.id === slotProps.value.id) + 1 }} - {{ slotProps.value.name }}</div>
                         </div>
                         <span v-else>
                             {{ slotProps.placeholder }}
@@ -15,18 +15,19 @@
                     </template>
                     <template #option="slotProps">
                         <div class="flex items-center">
-                            <div>{{ slotProps.option.name }}</div>
+                            <div>{{ slotProps.index + 1 }} - {{ slotProps.option.name }}</div>
                         </div>
                     </template>
                 </Select>
             </div>
-            <div class="col-span-6">
+            <div class="col-span-12 md:col-span-6">
                 <label for="house-no" class="font-semibold">លេខផ្ទះ <span class="text-red-500">*</span></label>
                 <Select id="house-no" v-model="selectedHouse" :options="houses" filter optionLabel="name" size="small"
                     placeholder="Select a House" class="w-full" @update:modelValue="onHouseChange">
-                    <template #value="slotProps">
+
+                    <template #value="slotProps" >
                         <div v-if="slotProps.value" class="flex items-center">
-                            <div>{{ slotProps.value.name }}</div>
+                            <div>{{ houses.findIndex(h => h.id === slotProps.value.id) + 1 }} - {{ slotProps.value.name }}</div>
                         </div>
                         <span v-else>
                             {{ slotProps.placeholder }}
@@ -34,7 +35,7 @@
                     </template>
                     <template #option="slotProps">
                         <div class="flex items-center">
-                            <div>{{ slotProps.option.name }}</div>
+                            <div>{{ slotProps.index + 1 }} - {{ slotProps.option.name }}</div>
                         </div>
                     </template>
                 </Select>
@@ -45,17 +46,17 @@
 
     <div class="card">
         <div class="grid grid-cols-12 gap-1">
-            <div class="col-span-6">
+            <div class="col-span-12 md:col-span-6">
                 <div class="bg-white text-gray-800 rounded-lg shadow p-2" style="height: 350px;">
-                <BoqLevelOne />
+                    <BoqLevelOne />
                 </div>
             </div>
-            <div class="col-span-6">
+            <div class="col-span-12 md:col-span-6">
                 <div class="bg-white text-gray-800 rounded-lg shadow p-2" style="height: 350px;">
-                <BoqLevelTwo />
+                    <BoqLevelTwo />
                 </div>
             </div>
-            <div class="col-span-12 " >
+            <div class="col-span-12">
                 <div class="bg-white text-gray-800 rounded-lg shadow p-2" style="height: 400px;">
                     <BoqItem />
                 </div>

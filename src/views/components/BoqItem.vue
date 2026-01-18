@@ -17,10 +17,10 @@
             <Column field="spec" header="Spec"></Column>
             <Column field="brand" header="Brand"></Column>
             <Column field="size" header="Size"></Column>
-            <Column field="unit" header="Unit"></Column>
-            <Column field="qty" header="Qty"></Column>
-            <Column field="material_unit" header="Material_Unit_Rate"></Column>
-            <Column field="labor_unit" header="Labor_Unit_Rate"></Column>
+            <Column field="unit" header="Unit" ></Column>
+            <Column field="qty" header="Qty" style="text-align:right"></Column>
+            <Column field="material_unit" header="Material" style="text-align:right" ></Column>
+            <Column field="labor_unit" header="Labor" style="text-align:right"></Column>
         </DataTable>
     </div>
 
