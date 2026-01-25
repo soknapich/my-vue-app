@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
-            <Button icon="pi pi-plus" rounded size="small" @click="clearData();" />
+            <Button icon="pi pi-plus" title="New" rounded size="small" @click="clearData();" />
         </div>
 
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -17,10 +17,10 @@
             <Column field="spec" header="Spec"></Column>
             <Column field="brand" header="Brand"></Column>
             <Column field="size" header="Size"></Column>
-            <Column field="unit" header="Unit" ></Column>
-            <Column field="qty" header="Qty" style="text-align:right"></Column>
-            <Column field="material_unit" header="Material" style="text-align:right" ></Column>
-            <Column field="labor_unit" header="Labor" style="text-align:right"></Column>
+            <Column field="unit" header="Unit"></Column>
+            <Column field="qty" header="Qty"></Column>
+            <Column field="material_unit" header="Material"></Column>
+            <Column field="labor_unit" header="Labor"></Column>
         </DataTable>
     </div>
 
