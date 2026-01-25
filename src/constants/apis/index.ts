@@ -30,6 +30,7 @@ interface BoqLevel1 {
   getOneBoqLevel1: ApiAction;
   deleteBoqLevel1: ApiAction;
   copyBoqLevel1: ApiAction;
+  copyAllBoqLevel1: ApiAction;
 }
 
 interface BoqLevel2 {
@@ -128,7 +129,11 @@ const APIs: ApiConfig = {
     copyBoqLevel1: {
       url: 'boq-level-one',
       method: 'patch'
-    }
+    },
+    copyAllBoqLevel1: {
+      url: 'boq-level-one/copy-all',
+      method: 'post',
+    },
   },
   
   boqLevel2: {

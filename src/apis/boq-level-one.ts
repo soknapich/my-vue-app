@@ -32,9 +32,17 @@ export function deletBoqLevel1(id: any) {
   });
 }
 
-export function copyBoqLevel1(id: any) {
+export function copyBoqLevel1(data) {
   return request({
     url: `${APIs.boqLevel1.copyBoqLevel1.url}/${id}`,
     method: APIs.boqLevel1.copyBoqLevel1.method,
+  });
+}
+
+export function copyAllBoqLevel1(data: any) {
+  return request({
+    url: `${APIs.boqLevel1.copyAllBoqLevel1.url}`,
+    method: APIs.boqLevel1.copyAllBoqLevel1.method,
+    params: data.params
   });
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flex flex-column justify-end gap-2" v-if="levelOneStore.houseId">
-         
+            <Button icon="pi pi-copy" rounded size="small" @click="moveBoqItems(levelOneStore.houseId)" />
             <Button icon="pi pi-plus" rounded size="small" @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -37,6 +37,8 @@
             </div>
         </Form>
     </Dialog>
+
+    <MoveDialog v-if="levelOneStore.openDailog" />
 </template>
 
 <script setup>
@@ -45,9 +47,10 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
 import ContextMenu from 'primevue/contextmenu';
 import Dialog from 'primevue/dialog';
+import MoveDialog from "@/views/components/MoveDialog.vue";
+
 import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from "@/stores/boqItem";
@@ -68,9 +71,11 @@ let dataItem = ref({
 const cm = ref();
 const selectedItem = ref();
 
+
 const menuModel = ref([
     { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) },
     { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) },
+    // { label: 'Move', icon: 'pi pi-fw pi-send', command: () => moveBoqContext(selectedItem) },
     { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) },
     { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) },
     { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) }
@@ -106,7 +111,19 @@ const copyBoqContext = async (row) => {
     }
 };
 
-const refreshBoqContext = async (row) =>{
+const moveBoqItems = async (house_id) => {
+    //alert('Under contruction: ' + row.value.id);
+    levelOneStore.openDailog = true;
+    levelOneStore.selected = house_id;
+    //alert(house_id);
+    // const result = confirm("Confirm copy!");
+    // if (result) {
+    //     await levelOneStore.copyItem(row.value.id, row.value.house_id);
+    // }
+};
+
+
+const refreshBoqContext = async (row) => {
     await levelOneStore.getAll(row.value.house_id);
 };
 

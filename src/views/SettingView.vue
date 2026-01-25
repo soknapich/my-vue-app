@@ -41,7 +41,6 @@
                 </Select>
             </div>
         </div>
-
     </div>
 
     <div class="card">
@@ -87,7 +86,6 @@ const selectedHouse = ref();
 
 let plans = ref([]);
 let houses = ref([]);
-
 
 
 const onPlanChange = async (value) => {

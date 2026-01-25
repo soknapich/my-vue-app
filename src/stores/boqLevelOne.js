@@ -5,13 +5,15 @@ import {
   createBoqLevel1,
   updateBoqLevel1,
   deletBoqLevel1,
-  copyBoqLevel1
+  copyBoqLevel1,
+  copyAllBoqLevel1
 } from "@/apis/boq-level-one";
 
 export const useLevelOneStore = defineStore("boqLevelOne", {
   state: () => ({
     selected: null,
     houseId: null,
+    openDailog: false,
     errors: [],
     items: [],
   }),
@@ -58,17 +60,31 @@ export const useLevelOneStore = defineStore("boqLevelOne", {
         await this.getAll(data.house_id);
       }
     },
-    
+
     async delete(id, parent_id) {
       await deletBoqLevel1(id);
       // refresh list AFTER delete
       await this.getAll(parent_id);
     },
-    
+
     async copyItem(id, parent_id) {
       await copyBoqLevel1(id);
       // refresh list AFTER delete
       await this.getAll(parent_id);
     },
+
+    async copyAllItems(pid, hid, from_id) {
+      await copyAllBoqLevel1({
+        params: {
+          plan_id: pid,
+          to_house_id: hid,
+          from_house_id: from_id
+        }
+      }
+      );
+
+      await this.getAll(from_id);
+    },
+
   },
 });
