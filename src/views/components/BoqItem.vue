@@ -25,55 +25,76 @@
     </div>
 
     <!-- Create Boq itesm -->
-    <Dialog v-model:visible="visibleBtn" maximizable modal header="Create Item" :style="{ width: '30rem' }">
+    <Dialog v-model:visible="visibleBtn" maximizable modal :header="dataItem?.id > 0 ? 'Edit' : 'New'" :style="{ width: '30rem' }">
         <Form class="w-full">
             <div class="flex flex-col mb-4">
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col">
                     <label for="title" class="font-semibold">Title <span class="text-red-500">*</span></label>
-                    <InputText id="title" v-model="dataItem.title" size="small" class="flex-auto" autocomplete="off" />
-                    <span class="text-red-500">{{ boqItem.errors.title?.[0] }}</span>
+                    <InputText id="title" v-model="dataItem.title" size="small" class="flex-auto" autocomplete="off" fluid/>
+                    <span class="text-red-500 text-sm">{{ boqItem.errors.title?.[0] }}</span>
 
                 </div>
-                <div class="flex flex-col gap-2 mt-2">
+                <div class="flex flex-col mt-2">
                     <label for="spec" class="font-semibold">Spec <span class="text-red-500">*</span></label>
-                    <InputText id="spec" v-model="dataItem.spec" size="small" class="flex-auto" autocomplete="off" />
-                    <span class="text-red-500">{{ boqItem.errors.spec?.[0] }}</span>
+                    <InputText id="spec" v-model="dataItem.spec" size="small" class="flex-auto" autocomplete="off" fluid/>
+                    <span class="text-red-500 text-sm">{{ boqItem.errors.spec?.[0] }}</span>
                 </div>
                 <div class="flex flex-col gap-2 mt-2">
-                    <label for="brand" class="font-semibold">Brand <span class="text-red-500">*</span></label>
-                    <InputText id="brand" v-model="dataItem.brand" size="small" class="flex-auto" autocomplete="off" />
-                    <span class="text-red-500">{{ boqItem.errors.brand?.[0] }}</span>
-                </div>
-                <div class="flex flex-col gap-2 mt-2">
-                    <label for="size" class="font-semibold">Size <span class="text-red-500">*</span></label>
-                    <InputText id="size" v-model="dataItem.size" size="small" class="flex-auto" autocomplete="off" />
-                    <span class="text-red-500">{{ boqItem.errors.size?.[0] }}</span>
-                </div>
-                <div class="flex flex-col gap-2 mt-2">
-                    <label for="unit" class="font-semibold">Unit <span class="text-red-500">*</span></label>
-                    <InputText id="unit" v-model="dataItem.unit" size="small" class="flex-auto" autocomplete="off"
-                        fluid />
-                    <span class="text-red-500">{{ boqItem.errors.unit?.[0] }}</span>
-                </div>
-                <div class="flex flex-col gap-2 mt-2">
-                    <label for="qty" class="font-semibold">Qty <span class="text-red-500">*</span></label>
-                    <InputNumber id="qty" v-model="dataItem.qty" size="small" class="flex-auto" autocomplete="off"
-                        inputId="locale-us" locale="en-US" :minFractionDigits="1" fluid />
-                    <span class="text-red-500">{{ boqItem.errors.qty?.[0] }}</span>
-                </div>
-                <div class="flex flex-col gap-2 mt-2">
-                    <label for="material_unit" class="font-semibold">Material Unit <span
-                            class="text-red-500">*</span></label>
-                    <InputNumber id="material_unit" v-model="dataItem.material_unit" size="small" class="flex-auto"
-                        inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid autocomplete="off" />
-                    <span class="text-red-500">{{ boqItem.errors.material_unit?.[0] }}</span>
-                </div>
-                <div class="flex flex-col gap-2 mt-2">
-                    <label for="labor_unit" class="font-semibold">Labor Unit <span class="text-red-500">*</span></label>
-                    <InputNumber id="labor_unit" v-model="dataItem.labor_unit" size="small" class="flex-auto"
-                        inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid autocomplete="off" />
-                    <span class="text-red-500">{{ boqItem.errors.labor_unit?.[0] }}</span>
+                    <div class="grid grid-cols-12 gap-2">
+                        <div class="col-span-12 md:col-span-6">
+                            <label for="brand" class="font-semibold">Brand <span class="text-red-500">*</span></label>
+                            <InputText id="brand" v-model="dataItem.brand" size="small" class="flex-auto"
+                                autocomplete="off" fluid/>
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.brand?.[0] }}</span>
+                        </div>
 
+                        <div class="col-span-12 md:col-span-6">
+                            <label for="size" class="font-semibold">Size <span class="text-red-500">*</span></label>
+                            <InputText id="size" v-model="dataItem.size" size="small" class="flex-auto"
+                                autocomplete="off" fluid/>
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.size?.[0] }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2 mt-2">
+
+                    <div class="grid grid-cols-12 gap-2">
+                        <div class="col-span-12 md:col-span-6">
+                            <label for="unit" class="font-semibold">Unit <span class="text-red-500">*</span></label>
+                            <InputText id="unit" v-model="dataItem.unit" size="small" class="flex-auto"
+                                autocomplete="off" fluid />
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.unit?.[0] }}</span>
+                        </div>
+                        <div class="col-span-12 md:col-span-6">
+                            <label for="qty" class="font-semibold">Qty <span class="text-red-500">*</span></label>
+                            <InputNumber id="qty" v-model="dataItem.qty" size="small" class="flex-auto"
+                                autocomplete="off" inputId="locale-us" locale="en-US" :minFractionDigits="1" fluid />
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.qty?.[0] }}</span>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex flex-col gap-2 mt-2">
+                    <div class="grid grid-cols-12 gap-2">
+                        <div class="col-span-12 md:col-span-6">
+                            <label for="material_unit" class="font-semibold">Material Unit <span
+                                    class="text-red-500">*</span></label>
+                            <InputNumber id="material_unit" v-model="dataItem.material_unit" size="small"
+                                class="flex-auto" inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid
+                                autocomplete="off" />
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.material_unit?.[0] }}</span>
+                        </div>
+                        <div class="col-span-12 md:col-span-6">
+                            <label for="labor_unit" class="font-semibold">Labor Unit <span
+                                    class="text-red-500">*</span></label>
+                            <InputNumber id="labor_unit" v-model="dataItem.labor_unit" size="small" class="flex-auto"
+                                inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid autocomplete="off" />
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.labor_unit?.[0] }}</span>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
             <div class="flex gap-2">

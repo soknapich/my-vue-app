@@ -18,13 +18,13 @@
         </DataTable>
     </div>
     <!-- Create Boq itesm -->
-    <Dialog v-model:visible="visibleBtn" maximizable modal header="Create Item" :style="{ width: '30rem' }">
+    <Dialog v-model:visible="visibleBtn" maximizable modal :header="dataItem?.id > 0 ? 'Edit' : 'New'" :style="{ width: '30rem' }">
         <Form class="w-full">
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col gap-2 mb-4">
                     <label for="title" class="font-semibold">Title <span class="text-red-500">*</span></label>
                     <InputText id="title" v-model="dataItem.title" size="small" class="flex-auto" autocomplete="off" />
-                    <span class="text-red-500">{{ boqTwoStore.errors.title?.[0] }}</span>
+                    <span class="text-red-500 text-sm">{{ boqTwoStore.errors.title?.[0] }}</span>
 
                 </div>
                 <div class="flex gap-2">
