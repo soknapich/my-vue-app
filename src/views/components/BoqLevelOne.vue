@@ -45,10 +45,8 @@
 import { ref } from "vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import ContextMenu from 'primevue/contextmenu';
-import Dialog from 'primevue/dialog';
 import MoveDialog from "@/views/components/MoveDialog.vue";
 
 import { useLevelOneStore } from '@/stores/boqLevelOne';

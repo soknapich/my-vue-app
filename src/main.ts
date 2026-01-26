@@ -10,12 +10,20 @@ import "@/assets/main.css";
 import router from '@/router';
 import '@/services/navigation-guard';
 
+// PrimeVue Components
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+
 const app = createApp(App);
 // 1️⃣ Create Pinia instance
 const pinia = createPinia();
 // 2️⃣ Install Pinia
 app.use(pinia);
 app.use(router);
+
+app.component('Dialog', Dialog);
+app.component('Button', Button);
+
 app.use(PrimeVue, {
     theme: {
         preset: Aura
