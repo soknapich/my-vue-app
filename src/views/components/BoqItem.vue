@@ -109,13 +109,6 @@
 
 <script setup>
 import { ref } from "vue";
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
-import Dialog from 'primevue/dialog';
-import ContextMenu from 'primevue/contextmenu';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';
 const boqTwoStore = useLevelTwoStore();
@@ -123,6 +116,7 @@ const boqItem = useBoqItemStore();
 
 //Create new 
 const visibleBtn = ref(false);
+
 let dataItem = ref({
     id: 0,
     level_id: 0,

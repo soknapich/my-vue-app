@@ -66,7 +66,6 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import Select from 'primevue/select';
 import { getAll, getNext } from "@/apis/plan";
 import BoqItem from "@/views/components/BoqItem.vue";
 import BoqLevelOne from "@/views/components/BoqLevelOne.vue";

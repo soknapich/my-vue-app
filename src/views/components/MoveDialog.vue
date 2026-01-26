@@ -63,10 +63,6 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import Select from 'primevue/select';
-import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
-import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 
 import { getAll, getNext } from "@/apis/plan";

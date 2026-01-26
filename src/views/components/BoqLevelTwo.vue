@@ -40,14 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
-import ContextMenu from 'primevue/contextmenu';
-import Dialog from 'primevue/dialog';
+import { ref } from "vue";
 import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';

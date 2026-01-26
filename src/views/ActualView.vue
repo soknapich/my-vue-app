@@ -26,9 +26,6 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import TreeTable from 'primevue/treetable';
-import Column from 'primevue/column';
-
 import { getAll, getNext } from "@/apis/plan";
 
 const data = ref([]);

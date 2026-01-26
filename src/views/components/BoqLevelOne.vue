@@ -43,12 +43,7 @@
 
 <script setup>
 import { ref } from "vue";
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import InputText from 'primevue/inputtext';
-import ContextMenu from 'primevue/contextmenu';
 import MoveDialog from "@/views/components/MoveDialog.vue";
-
 import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from "@/stores/boqItem";
@@ -119,7 +114,6 @@ const moveBoqItems = async (house_id) => {
     //     await levelOneStore.copyItem(row.value.id, row.value.house_id);
     // }
 };
-
 
 const refreshBoqContext = async (row) => {
     await levelOneStore.getAll(row.value.house_id);
