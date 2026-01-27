@@ -56,8 +56,8 @@ const route = useRoute();
 const menuItems = [
   { name: "Home", to: "/", icon: LayoutDashboard },
   { name: "Estimate", to: "/estimate", icon: TableProperties },
-  { name: "Actual", to: "/actual", icon: LayoutDashboard },
-  { name: "Setting", to: "/setting", icon: Settings },
+  // { name: "Actual", to: "/actual", icon: LayoutDashboard },
+  { name: "Boq Input", to: "/setting", icon: Settings },
 ];
 
 const collapsed = ref(false);

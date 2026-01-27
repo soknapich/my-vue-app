@@ -18,6 +18,10 @@
                 <Column field="brand" header="ម៉ាក"></Column>
                 <Column field="size" header="ទំហំ"></Column>
                 <Column field="unit" header="ឯកតា"></Column>
+                <Column field="qty" header="បរិមាណ"></Column>
+                <Column field="material" header="Material"></Column>
+                <Column field="labor" header="Labor"></Column>
+                <Column field="total" header="Total"></Column>
             </TreeTable>
         </div>
     </div>

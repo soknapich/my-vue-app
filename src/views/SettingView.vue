@@ -4,7 +4,7 @@
             <div class="col-span-12 md:col-span-6">
                 <label for="plan" class="font-semibold">គម្រោង <span class="text-red-500">*</span></label>
                 <Select id="plan" v-model="selectedPlan" :options="plans" filter optionLabel="name" size="small"
-                    placeholder="Select a Plan" class="w-full" @update:modelValue="onPlanChange">
+                    placeholder="ជ្រើសរើសគម្រោង" class="w-full" @update:modelValue="onPlanChange">
                     <template #value="slotProps">
                         <div v-if="slotProps.value" class="flex items-center">
                             <div>{{ plans.findIndex(h => h.id === slotProps.value.id) + 1 }} - {{ slotProps.value.name }}</div>
@@ -23,7 +23,7 @@
             <div class="col-span-12 md:col-span-6">
                 <label for="house-no" class="font-semibold">លេខផ្ទះ <span class="text-red-500">*</span></label>
                 <Select id="house-no" v-model="selectedHouse" :options="houses" filter optionLabel="name" size="small"
-                    placeholder="Select a House" class="w-full" @update:modelValue="onHouseChange">
+                    placeholder="ជ្រើសរើសគលេខផ្ទះ" class="w-full" @update:modelValue="onHouseChange">
 
                     <template #value="slotProps" >
                         <div v-if="slotProps.value" class="flex items-center">

@@ -19,8 +19,8 @@
             <Column field="size" header="Size"></Column>
             <Column field="unit" header="Unit"></Column>
             <Column field="qty" header="Qty"></Column>
-            <Column field="material_unit" header="Material"></Column>
-            <Column field="labor_unit" header="Labor"></Column>
+            <Column field="material" header="Material"></Column>
+            <Column field="labor" header="Labor"></Column>
         </DataTable>
     </div>
 
@@ -78,19 +78,19 @@
                 <div class="flex flex-col gap-2 mt-2">
                     <div class="grid grid-cols-12 gap-2">
                         <div class="col-span-12 md:col-span-6">
-                            <label for="material_unit" class="font-semibold">Material Unit <span
+                            <label for="material" class="font-semibold">Material Unit <span
                                     class="text-red-500">*</span></label>
-                            <InputNumber id="material_unit" v-model="dataItem.material_unit" size="small"
+                            <InputNumber id="material" v-model="dataItem.material" size="small"
                                 class="flex-auto" inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid
                                 autocomplete="off" />
-                            <span class="text-red-500 text-sm">{{ boqItem.errors.material_unit?.[0] }}</span>
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.material?.[0] }}</span>
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <label for="labor_unit" class="font-semibold">Labor Unit <span
+                            <label for="labor" class="font-semibold">Labor Unit <span
                                     class="text-red-500">*</span></label>
-                            <InputNumber id="labor_unit" v-model="dataItem.labor_unit" size="small" class="flex-auto"
+                            <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
                                 inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid autocomplete="off" />
-                            <span class="text-red-500 text-sm">{{ boqItem.errors.labor_unit?.[0] }}</span>
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
 
                         </div>
 
@@ -126,8 +126,8 @@ let dataItem = ref({
     unit: '',
     size: '',
     qty: '',
-    material_unit: '',
-    labor_unit: ''
+    material: '',
+    labor: ''
 });
 
 const errors = ref({});
@@ -154,8 +154,8 @@ const clearData = () => {
         size: '',
         unit: '',
         qty: '',
-        material_unit: '',
-        labor_unit: ''
+        material: '',
+        labor: ''
     };
 
     visibleBtn.value = true;
@@ -201,8 +201,8 @@ const editBoqContext = (row) => {
             unit: result.unit,
             size: result.size,
             qty: result.qty,
-            material_unit: result.material_unit,
-            labor_unit: result.labor_unit
+            material: result.material,
+            labor: result.labor
         };
 
         //console.log(dataItem);
