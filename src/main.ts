@@ -24,6 +24,7 @@ import TreeTable from 'primevue/treetable';
 import { Form } from '@primevue/forms';
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmationService from 'primevue/confirmationservice';
+import Checkbox from 'primevue/checkbox';
 
 const app = createApp(App);
 // 1️⃣ Create Pinia instance
@@ -44,6 +45,7 @@ app.component('Toast', Toast);
 app.component("TreeTable", TreeTable);
 app.component('Form', Form);
 app.component('ConfirmDialog', ConfirmDialog);
+app.component('Checkbox', Checkbox);
 
 app.use(PrimeVue, {
     theme: {

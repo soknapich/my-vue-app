@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-xl font-semibold text-gray-800 ml-2">Actual</h2>
+    <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">Estimate</h2>
     <div class="overflow-x-auto">
         <div class="card">
             <TreeTable :value="nodes" lazy size="small" @node-expand="onNodeExpand" selectionMode="single"
@@ -19,9 +19,9 @@
                 <Column field="size" header="ទំហំ"></Column>
                 <Column field="unit" header="ឯកតា"></Column>
                 <Column field="qty" header="បរិមាណ"></Column>
-                <Column field="material" header="Material"></Column>
-                <Column field="labor" header="Labor"></Column>
-                <Column field="total" header="Total"></Column>
+                <Column field="material" header="តម្លៃសម្ភារ"></Column>
+                <Column field="labor" header="តម្លៃពលកម្ម"></Column>
+                <Column field="total" header="សរុប"></Column>
             </TreeTable>
         </div>
     </div>
@@ -55,6 +55,7 @@ const onNodeExpand = async (node) => {
 onMounted(async () => {
     loadRoot();
 });
+const toNumber = (val) => Number(val.replace(/,/g, ""));
 
 const loadRoot = async () => {
     const response = await getAll({
@@ -66,7 +67,54 @@ const loadRoot = async () => {
     });
     if (response.data.status) {
         const result = response.data.data;
-        nodes.value = result.data;
+        const items = result.data;
+
+        const sumMaterial = items.reduce((sum, item) => {
+            return sum + toNumber(item.material);
+        }, 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        const sumLabor = items.reduce((sum, item) => {
+            return sum + toNumber(item.labor);
+        }, 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        const sumTotal = items.reduce((sum, item) => {
+            return sum + toNumber(item.total);
+        }, 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        nodes.value = [...items,
+        {
+            "key": 2133,
+            "id": 2133,
+            "name": "TOTAL:",
+            "material": sumMaterial,
+            "labor": sumLabor,
+            "total": sumTotal,
+            "data": {
+                "id": 2133,
+                "title": "TOTAL:",
+                "spec": "",
+                "brand": "",
+                "size": "",
+                "unit": "",
+                "qty": "",
+                "material": sumMaterial,
+                "labor": sumLabor,
+                "total": sumTotal,
+            },
+            "url": "",
+            "icon": "pi pi-dollar",
+            "leaf": true
+        }
+        ];
     }
 }
 </script>

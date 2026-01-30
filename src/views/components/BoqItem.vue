@@ -1,7 +1,22 @@
 <template>
     <div class="">
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
+            <!-- <Button icon="pi pi-plus" title="New" rounded size="small" @click="downloadExcel();" /> -->
             <Button icon="pi pi-plus" title="New" rounded size="small" @click="clearData();" />
+        </div>
+
+        <div class="card flex flex-wrap justify-center gap-4">
+            <div class="flex items-center gap-2">
+                <Checkbox v-model="estimate_or_actual" inputId="ingredient1" name="estimate_or_actual" value="Estimate"
+                    size="small" />
+                <label for="ingredient1"> Estimate </label>
+            </div>
+            <div class="flex items-center gap-2">
+                <Checkbox v-model="estimate_or_actual" inputId="ingredient2" name="estimate_or_actual" value="Actual"
+                    size="small" />
+                <label for="ingredient2"> Actual </label>
+            </div>
+
         </div>
 
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -18,25 +33,32 @@
             <Column field="brand" header="Brand"></Column>
             <Column field="size" header="Size"></Column>
             <Column field="unit" header="Unit"></Column>
-            <Column field="qty" header="Qty"></Column>
-            <Column field="material" header="Material"></Column>
-            <Column field="labor" header="Labor"></Column>
+            <Column field="qty_val" header="Qty" v-if="estimate_or_actual.includes('Estimate')"></Column>
+            <Column field="material_val" header="Material" v-if="estimate_or_actual.includes('Estimate')"></Column>
+            <Column field="labor_val" header="Labor" v-if="estimate_or_actual.includes('Estimate')"></Column>
+            <Column field="actual_qty" header="Actual Qty" v-if="estimate_or_actual.includes('Actual')"></Column>
+            <Column field="actual_material" header="Actual Material" v-if="estimate_or_actual.includes('Actual')">
+            </Column>
+            <Column field="actual_labor" header="Actual Labor" v-if="estimate_or_actual.includes('Actual')"></Column>
         </DataTable>
     </div>
 
     <!-- Create Boq itesm -->
-    <Dialog v-model:visible="visibleBtn" maximizable modal :header="dataItem?.id > 0 ? 'Edit' : 'New'" :style="{ width: '30rem' }">
+    <Dialog v-model:visible="visibleBtn" maximizable modal :header="dataItem?.id > 0 ? 'Edit' : 'New'"
+        :style="{ width: '30rem' }">
         <Form class="w-full">
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col">
                     <label for="title" class="font-semibold">Title <span class="text-red-500">*</span></label>
-                    <InputText id="title" v-model="dataItem.title" size="small" class="flex-auto" autocomplete="off" fluid/>
+                    <InputText id="title" v-model="dataItem.title" size="small" class="flex-auto" autocomplete="off"
+                        fluid />
                     <span class="text-red-500 text-sm">{{ boqItem.errors.title?.[0] }}</span>
 
                 </div>
                 <div class="flex flex-col mt-2">
                     <label for="spec" class="font-semibold">Spec <span class="text-red-500">*</span></label>
-                    <InputText id="spec" v-model="dataItem.spec" size="small" class="flex-auto" autocomplete="off" fluid/>
+                    <InputText id="spec" v-model="dataItem.spec" size="small" class="flex-auto" autocomplete="off"
+                        fluid />
                     <span class="text-red-500 text-sm">{{ boqItem.errors.spec?.[0] }}</span>
                 </div>
                 <div class="flex flex-col gap-2 mt-2">
@@ -44,14 +66,14 @@
                         <div class="col-span-12 md:col-span-6">
                             <label for="brand" class="font-semibold">Brand <span class="text-red-500">*</span></label>
                             <InputText id="brand" v-model="dataItem.brand" size="small" class="flex-auto"
-                                autocomplete="off" fluid/>
+                                autocomplete="off" fluid />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.brand?.[0] }}</span>
                         </div>
 
                         <div class="col-span-12 md:col-span-6">
                             <label for="size" class="font-semibold">Size <span class="text-red-500">*</span></label>
                             <InputText id="size" v-model="dataItem.size" size="small" class="flex-auto"
-                                autocomplete="off" fluid/>
+                                autocomplete="off" fluid />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.size?.[0] }}</span>
                         </div>
                     </div>
@@ -80,16 +102,15 @@
                         <div class="col-span-12 md:col-span-6">
                             <label for="material" class="font-semibold">Material Unit <span
                                     class="text-red-500">*</span></label>
-                            <InputNumber id="material" v-model="dataItem.material" size="small"
-                                class="flex-auto" inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid
-                                autocomplete="off" />
+                            <InputNumber id="material" v-model="dataItem.material" size="small" class="flex-auto"
+                                mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.material?.[0] }}</span>
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <label for="labor" class="font-semibold">Labor Unit <span
                                     class="text-red-500">*</span></label>
                             <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
-                                inputId="locale-us" locale="en-US" :minFractionDigits="2" fluid autocomplete="off" />
+                                mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
 
                         </div>
@@ -105,17 +126,88 @@
         </Form>
     </Dialog>
 
+    <!-- Create Boq itesm -->
+    <Dialog v-model:visible="visibleBtnActual" maximizable modal header="Actual Value" :style="{ width: '30rem' }">
+        <Form class="w-full">
+            <div class="flex flex-col mb-4">
+                <div class="flex gap-2">
+                    <Checkbox v-model="isSame" inputId="isSame" binary @change="onChecked"/>
+                    <label for="agree">Same as Estimate</label>
+                </div>
+            </div>
+
+            <div class="flex flex-col mb-4">
+                <div class="flex flex-col">
+                    <label for="title" class="font-semibold">Actual Qty <span class="text-red-500">*</span></label>
+                    <InputNumber id="actual_qty" v-model="dataItemActual.actual_qty" size="small" class="flex-auto"
+                        mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
+                    <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_qty?.[0] }}</span>
+                </div>
+            </div>
+            <div class="flex flex-col mb-4">
+                <div class="flex flex-col">
+                    <label for="title" class="font-semibold">Actual Material <span class="text-red-500">*</span></label>
+                    <InputNumber id="actual_qty" v-model="dataItemActual.actual_material" size="small" class="flex-auto"
+                        mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
+                    <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_material?.[0] }}</span>
+                </div>
+            </div>
+            <div class="flex flex-col mb-4">
+                <div class="flex flex-col">
+                    <label for="title" class="font-semibold">Actual Labor <span class="text-red-500">*</span></label>
+                    <InputNumber id="actual_qty" v-model="dataItemActual.actual_labor" size="small" class="flex-auto"
+                        mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
+                    <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_labor?.[0] }}</span>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <Button type="button" size="small" label="Cancel" severity="secondary" @click="visibleBtnActual = false"
+                    class="flex-1"></Button>
+                <Button type="button" size="small" label="Save" @click="submitActualForm" class="flex-1"></Button>
+            </div>
+
+        </Form>
+    </Dialog>
+
 </template>
 
 <script setup>
 import { ref } from "vue";
+import axios from 'axios';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';
+import exportExcell from "@/services/download";
 const boqTwoStore = useLevelTwoStore();
 const boqItem = useBoqItemStore();
 
+const estimate_or_actual = ref(["Estimate", "Actual"]);
+const isSame = ref(false);
+const visibleBtnActual = ref(false);
 //Create new 
 const visibleBtn = ref(false);
+
+let dataItemActual = ref({
+    id: 0,
+    actual_qty: 0,
+    actual_material: 0,
+    actual_labor: 0,
+    row: {}
+});
+
+const onChecked = (e) =>{
+    //alert(isSame.value);
+    if(isSame.value){
+        dataItemActual = {
+            id: dataItemActual.row.id,
+            actual_qty: dataItemActual.row.qty_val,
+            actual_material: dataItemActual.row.material_val,
+            actual_labor: dataItemActual.row.labor_val,
+            row: dataItem.row
+        };
+    }
+};
+
 
 let dataItem = ref({
     id: 0,
@@ -130,7 +222,6 @@ let dataItem = ref({
     labor: ''
 });
 
-const errors = ref({});
 
 //Context menu
 const cm = ref();
@@ -140,6 +231,7 @@ const menuModel = ref([
     { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) },
     { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) },
     { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) },
+    { label: 'Actual', icon: 'pi pi-fw pi-pencil', command: () => editBoqActualContext(selectedItem) },
     { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) },
     { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) }
 ]);
@@ -159,7 +251,7 @@ const clearData = () => {
     };
 
     visibleBtn.value = true;
-}
+};
 
 const onRowContextMenu = (event) => {
     cm.value.show(event.originalEvent);
@@ -200,17 +292,28 @@ const editBoqContext = (row) => {
             brand: result.brand,
             unit: result.unit,
             size: result.size,
-            qty: result.qty,
-            material: result.material,
-            labor: result.labor
+            qty: result.qty_val,
+            material: result.material_val,
+            labor: result.labor_val
         };
-
         //console.log(dataItem);
-
         boqItem.errors = [];
         visibleBtn.value = true;
 
     }
+};
+
+const editBoqActualContext = (row) => {
+    isSame.value = false;
+    const result = boqItem.items.find(res => res.id === row.value.id);
+    dataItemActual = {
+            id: result.id,
+            actual_qty: result.actual_qty,
+            actual_material: result.actual_material,
+            actual_labor: result.actual_labor,
+            row: result
+        };
+    visibleBtnActual.value = true;
 };
 
 const submitForm = async () => {
@@ -225,5 +328,16 @@ const submitForm = async () => {
         visibleBtn.value = false;
     }
 };
+
+const submitActualForm = async () => {
+    await boqItem.updateActual({...dataItemActual, level_id: boqTwoStore.selected.id});
+    if (boqItem.errors1.length == 0) {
+        visibleBtnActual.value = false;
+    }
+};
+
+async function downloadExcel() {
+    await exportExcell('boq-item/export-excell', 'test');
+}
 
 </script>

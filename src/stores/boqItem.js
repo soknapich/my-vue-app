@@ -1,11 +1,12 @@
 // stores/loading.js
 import { defineStore } from "pinia";
-import { getNext, createItem, updateItem, deletItem, copyItem } from "@/apis/plan";
+import { getNext, createItem, updateItem, deletItem, copyItem, updateActualItem } from "@/apis/plan";
 
 export const useBoqItemStore = defineStore("boqItem", {
   state: () => ({
     selected: null,
     errors: [],
+    errors1: [],
     items: [],
   }),
   actions: {
@@ -60,7 +61,21 @@ export const useBoqItemStore = defineStore("boqItem", {
     async copyItem(id, parent_id) {
       await copyItem(id);
       await this.getAll(parent_id);
-    }
+    },
+
+    async updateActual(data) {
+      //alert(data);
+      const response = await updateActualItem(data.id, {
+        params: data,
+      }).catch((error) => {
+        this.errors1 = error.response.data.errors;
+      });
+
+      if (response?.data?.status) {
+        this.errors1 = [];
+        await this.getAll(data.level_id);
+      }
+    },
 
   },
 });

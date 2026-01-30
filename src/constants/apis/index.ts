@@ -45,6 +45,7 @@ interface BoqLevel2 {
 interface BoqItem {
   createBoqItem: ApiAction;
   updateBoqItem: ApiAction;
+  updateActualBoqItem: ApiAction;
   deleteBoqItem: ApiAction;
   copyBoqItem: ApiAction;
 }
@@ -170,6 +171,10 @@ const APIs: ApiConfig = {
     },
     updateBoqItem: {
       url: 'boq-item',
+      method: 'put'
+    },
+    updateActualBoqItem: {
+      url: 'boq-item/update-actual',
       method: 'put'
     },
     deleteBoqItem: {

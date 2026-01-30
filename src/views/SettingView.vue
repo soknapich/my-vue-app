@@ -113,6 +113,10 @@ const onHouseChange = async (value) => {
 };
 
 onMounted(async () => {
+    boqItemStore.items = [];
+    levelOneStore.items = [];
+    levelTwoStore.items = [];
+    
     const response = await getAll({
         params: {
             per_page: 20,

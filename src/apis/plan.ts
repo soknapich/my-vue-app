@@ -46,3 +46,11 @@ export function copyItem(id: any) {
     method: APIs.boqItem.copyBoqItem.method,
   });
 }
+
+export function updateActualItem(id: any, data: any) {
+  return request({
+    url: `${APIs.boqItem.updateActualBoqItem.url}/${id}`,
+    method: APIs.boqItem.updateActualBoqItem.method,
+    params: data.params,
+  });
+}

@@ -14,7 +14,7 @@
                 </template>
             </Column>
             <Column field="title"></Column>
-            <Column field="count" bodyClass="text-center" headerClass="text-center"></Column>
+            <Column field="count"   bodyStyle="text-align:right"></Column>
         </DataTable>
     </div>
     <!-- Create Boq itesm -->
