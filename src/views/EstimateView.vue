@@ -14,7 +14,7 @@
                         value="Actual" size="small" />
                     <label for="ingredient2"> Actual </label>
                 </div>
-                 <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2">
                     <Checkbox v-model="estimate_or_actual" inputId="ingredient3" name="estimate_or_actual"
                         value="Margin" size="small" />
                     <label for="ingredient3"> Margin </label>
@@ -43,10 +43,15 @@
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Estimate')"></Column>
                 <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Estimate')"></Column>
 
-                 <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Actual')"></Column>
                 <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Actual')"></Column>
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Actual')"></Column>
                 <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Actual')"></Column>
+
+                <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Margin')"></Column>
+                <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Margin')"></Column>
+                <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Margin')"></Column>
+                <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Margin')"></Column>
             </TreeTable>
         </div>
     </div>
