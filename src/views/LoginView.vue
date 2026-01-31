@@ -6,33 +6,21 @@
             <form @submit.prevent="handleLogin" class="space-y-4">
                 <div>
                     <label class="block text-gray-700 font-semibold mb-2">Email or Username</label>
-                    <InputGroup>
-                        <InputText type="username" size="small" v-model="username" placeholder="Enter your email or username"
-                            class="w-full" />
-                        <InputGroupAddon>
-                            <i class="pi pi-user"></i>
-                        </InputGroupAddon>
-
-                    </InputGroup>
-
+                    <div class="p-inputgroup">
+                        <InputText v-model="username" fluid  size="small" placeholder="Enter your email or username" />
+                    </div>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                    <InputGroup>
-                        <InputText :type="showPassword ? 'text' : 'password'" size="small" v-model="password" placeholder="Enter your password"
-                            class="w-full" />
-                        <InputGroupAddon>
-                            <Button type="button" size="small" :icon="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"  severity="secondary" @click="togglePassword" />
-                        </InputGroupAddon>
-                    </InputGroup>
+                    <Password v-model="password" toggleMask feedback="false" fluid size="small" placeholder="Enter your password" />
                 </div>
-                <Button type="submit" size="small" label="Sign In" class="w-full p-mb-4" />
+                <div class="flex items-center justify-between">
+                    <button type="submit"
+                        class="bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 w-full">
+                        Sign In
+                    </button>   
+                </div>
             </form>
-
-            <p class="text-center text-gray-600 mt-4">
-                Don't have an account?
-                <a href="#" class="text-green-700 hover:text-green-700 font-semibold">Sign up</a>
-            </p>
         </div>
     </div>
 
@@ -48,19 +36,13 @@ import { useRouter } from 'vue-router';
 import { signin } from "@/apis/authentication";
 import { setToken, setUserInfoCookie } from '@/services/authentication';
 import LoadingDialog from '@/components/LoadingDialog.vue';
-import AlertDialog from '../components/AlertDialog.vue';
+import AlertDialog from '@/components/AlertDialog.vue';
 
 const showLoading = ref(false);
 const showAlert = ref(false);
-const showPassword = ref(false);
-
 const router = useRouter();
 const username = ref('');
 const password = ref('');
-
-const togglePassword = () => {
-    showPassword.value = !showPassword.value;
-}
 
 const handleLogin = async () => {
     showLoading.value = true;
@@ -69,21 +51,14 @@ const handleLogin = async () => {
         password: password.value,
         concept: 'BOQ'
     });
-
-
     if (result && result.status === 200) {
-        
         await setToken('token', result.data?.access_token)
         await setToken('refreshToken', result.data?.refresh_token);
-        await setUserInfoCookie(result.data?.user);
-
         router.push({ path: '/' });
     } else {
         showAlert.value = true;
         //alert('Login failed. Please check your credentials and try again.');
     }
     showLoading.value = false;
-
-
 }
 </script>

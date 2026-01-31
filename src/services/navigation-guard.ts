@@ -15,6 +15,9 @@ router.beforeEach(async (to, from, next) => {
       token
     });
     //console.log(result);
+    if(result) {
+      await setUserInfoCookie(result.data);
+    }
 
     const isValidToken = (result && result.status === 200 && result.data?.id) ? true : false;
     if (!isValidToken && to.meta.requiresAuth) {

@@ -30,6 +30,9 @@
 
         <!-- Dropdown Menu -->
         <div v-if="showDropdown" class="absolute right-0 mt-2 w-36 bg-white border rounded shadow-md z-50">
+          <div class="px-4 py-2 border-b">
+            <div class="font-semibold text-gray-800">Name: {{ userInfo?.name?.toLowerCase() || '' }}</div>
+          </div>  
           <button @click="showLogoutConfirm = true"
             class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 hover:cursor-pointer">
             Logout
@@ -47,9 +50,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { setToken, setUserInfoCookie } from '@/services/authentication';
+import { setToken, setUserInfoCookie, getUserInfoCookie } from '@/services/authentication';
 import ConfirmationAlert from '@/components/ConfirmationAlert.vue';
 import AlertDialog from '@/components/AlertDialog.vue';
 import LoadingDialog from '@/components/LoadingDialog.vue';
@@ -63,6 +66,7 @@ defineProps<{
   breadcrumbs: string[]
 }>();
 
+let userInfo: any = null;
 
 const showDropdown = ref(false);
 const showLogoutConfirm = ref(false);
@@ -88,5 +92,10 @@ const logout = async () => {
 
   router.push({ path: '/login' });
 };
+
+onMounted(async () => {
+  const info = await getUserInfoCookie();
+  userInfo = JSON.parse(info || '{}');
+});
 
 </script>
