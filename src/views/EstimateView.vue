@@ -2,6 +2,26 @@
     <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">Estimate</h2>
     <div class="overflow-x-auto">
         <div class="card">
+
+            <div class="card flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flex items-center gap-2">
+                    <Checkbox v-model="estimate_or_actual" inputId="ingredient1" name="estimate_or_actual"
+                        value="Estimate" size="small" />
+                    <label for="ingredient1"> Estimate </label>
+                </div>
+                <div class="flex items-center gap-2">
+                    <Checkbox v-model="estimate_or_actual" inputId="ingredient2" name="estimate_or_actual"
+                        value="Actual" size="small" />
+                    <label for="ingredient2"> Actual </label>
+                </div>
+                 <div class="flex items-center gap-2">
+                    <Checkbox v-model="estimate_or_actual" inputId="ingredient3" name="estimate_or_actual"
+                        value="Margin" size="small" />
+                    <label for="ingredient3"> Margin </label>
+                </div>
+
+            </div>
+
             <TreeTable :value="nodes" lazy size="small" @node-expand="onNodeExpand" selectionMode="single"
                 tableStyle="min-width: 50rem">
                 <Column field="title" header="បរិយាយ" expander style="width: 40%">
@@ -14,14 +34,19 @@
                         </div>
                     </template>
                 </Column>
-                <Column field="spec" header="Spec"></Column>
+                <!-- <Column field="spec" header="Spec"></Column>
                 <Column field="brand" header="ម៉ាក"></Column>
                 <Column field="size" header="ទំហំ"></Column>
-                <Column field="unit" header="ឯកតា"></Column>
-                <Column field="qty" header="បរិមាណ"></Column>
-                <Column field="material" header="តម្លៃសម្ភារ"></Column>
-                <Column field="labor" header="តម្លៃពលកម្ម"></Column>
-                <Column field="total" header="សរុប"></Column>
+                <Column field="unit" header="ឯកតា"></Column> -->
+                <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Estimate')"></Column>
+                <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Estimate')"></Column>
+                <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Estimate')"></Column>
+                <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Estimate')"></Column>
+
+                 <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Actual')"></Column>
             </TreeTable>
         </div>
     </div>
@@ -32,8 +57,7 @@
 import { ref, onMounted } from "vue";
 import { getAll, getNext } from "@/apis/plan";
 
-const data = ref([]);
-const total = ref(0);
+const estimate_or_actual = ref(["Estimate", "Actual", "Margin"]);
 let nodes = ref([]);
 
 const onNodeExpand = async (node) => {
