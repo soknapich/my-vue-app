@@ -46,7 +46,7 @@
 <script setup lang="ts">
 
 import HeaderBar from "@/layouts/HeaderBar.vue";
-import { TableProperties, Menu, Settings, LayoutDashboard } from "lucide-vue-next";
+import { TableProperties, Menu, Settings, LayoutDashboard, ListTree } from "lucide-vue-next";
 import { useRoute } from "vue-router";
 import { computed, ref } from "vue";
 
@@ -55,9 +55,10 @@ const route = useRoute();
 
 const menuItems = [
   { name: "Home", to: "/", icon: LayoutDashboard },
-  { name: "Estimate", to: "/estimate", icon: TableProperties },
+  { name: "Estimate", to: "/estimate", icon: ListTree },
   // { name: "Actual", to: "/actual", icon: LayoutDashboard },
-  { name: "Boq Input", to: "/setting", icon: Settings },
+  { name: "Boq Input", to: "/boq-input", icon: Menu },
+  { name: "Setting", to: "/setting", icon: Settings },
 ];
 
 const collapsed = ref(false);

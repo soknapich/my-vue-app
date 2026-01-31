@@ -1,7 +1,7 @@
 <template>
     <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">Estimate</h2>
     <div class="overflow-x-auto">
-        <div class="card">
+        <div class="card bg-white text-gray-800 rounded-lg shadow p-2">
 
             <div class="card flex flex-wrap justify-center gap-4 mb-4">
                 <div class="flex items-center gap-2">

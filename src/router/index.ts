@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue';
 import ActualView from '@/views/ActualView.vue';
 import LoginView from '@/views/LoginView.vue';
 import EstimateView from '@/views/EstimateView.vue';
+import BoqInputView from '@/views/BoqInputView.vue';
 import SettingView from '@/views/SettingView.vue';
 
 const routes = [
@@ -41,6 +42,14 @@ const routes = [
         }
       },
       {
+        path: '/boq-input',
+        name: 'boq-input',
+        component: BoqInputView,
+        meta: {
+          requiresAuth: true
+        }
+      },
+            {
         path: '/setting',
         name: 'setting',
         component: SettingView,
