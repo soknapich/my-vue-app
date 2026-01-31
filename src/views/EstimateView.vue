@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">Estimate</h2>
+    <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">Boq Report</h2>
     <div class="overflow-x-auto">
         <div class="card bg-white text-gray-800 rounded-lg shadow p-2">
 
@@ -43,15 +43,14 @@
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Estimate')"></Column>
                 <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Estimate')"></Column>
 
-                <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Actual')"></Column>
-                <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Actual')"></Column>
-                <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Actual')"></Column>
-                <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Actual')"></Column>
+                
+                <Column field="actual_material" header="តម្លៃសម្ភារជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="actual_labor" header="តម្លៃពលកម្មជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="actual_total" header="សរុបជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')"></Column>
 
-                <Column field="qty" header="បរិមាណ" v-if="estimate_or_actual.includes('Margin')"></Column>
-                <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Margin')"></Column>
+                <!-- <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Margin')"></Column>
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Margin')"></Column>
-                <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Margin')"></Column>
+                <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Margin')"></Column> -->
             </TreeTable>
         </div>
     </div>
@@ -62,7 +61,7 @@
 import { ref, onMounted } from "vue";
 import { getAll, getNext } from "@/apis/plan";
 
-const estimate_or_actual = ref(["Estimate", "Actual", "Margin"]);
+const estimate_or_actual = ref(["Estimate", "", ""]);
 let nodes = ref([]);
 
 const onNodeExpand = async (node) => {
@@ -119,6 +118,27 @@ const loadRoot = async () => {
             maximumFractionDigits: 2
         });
 
+        const sumActualMaterial = items.reduce((sum, item) => {
+            return sum + toNumber(item.actual_material);
+        }, 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        const sumActualLabor = items.reduce((sum, item) => {
+            return sum + toNumber(item.actual_labor);
+        }, 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        const sumActualTotal = items.reduce((sum, item) => {
+            return sum + toNumber(item.actual_total);
+        }, 0).toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
         nodes.value = [...items,
         {
             "key": 2133,
@@ -138,6 +158,9 @@ const loadRoot = async () => {
                 "material": sumMaterial,
                 "labor": sumLabor,
                 "total": sumTotal,
+                "actual_material": sumActualMaterial,
+                "actual_labor": sumActualLabor,
+                "actual_total": sumActualTotal,
             },
             "url": "",
             "icon": "pi pi-dollar",

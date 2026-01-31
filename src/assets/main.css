@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body, .p-treetable-column-title {
+    font-family: "Noto Sans Khmer", Arial, sans-serif!important;
+    
+}
+
+.p-treetable-column-title,.p-treetable-body-cell-content {
+    font-size: 14px;
+}

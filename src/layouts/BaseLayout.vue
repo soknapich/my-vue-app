@@ -55,7 +55,7 @@ const route = useRoute();
 
 const menuItems = [
   { name: "Home", to: "/", icon: LayoutDashboard },
-  { name: "Estimate", to: "/estimate", icon: ListTree },
+  { name: "Boq Report", to: "/estimate", icon: ListTree },
   // { name: "Actual", to: "/actual", icon: LayoutDashboard },
   { name: "Boq Input", to: "/boq-input", icon: Menu },
   { name: "Setting", to: "/setting", icon: Settings },
