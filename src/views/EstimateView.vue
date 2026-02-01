@@ -14,10 +14,14 @@
                         value="Actual" size="small" />
                     <label for="ingredient2"> Actual </label>
                 </div>
-                <div class="flex items-center gap-2">
+                <!-- <div class="flex items-center gap-2">
                     <Checkbox v-model="estimate_or_actual" inputId="ingredient3" name="estimate_or_actual"
                         value="Margin" size="small" />
                     <label for="ingredient3"> Margin </label>
+                </div> -->
+                <div class="flex items-center gap-2">
+                    <!-- <Button icon="pi pi-plus" title="New" rounded size="small" @click="downloadExcel();" /> -->
+                    <Button icon="pi pi-file-excel" title="Export Excel" rounded size="small" @click="downloadExcel();" />
                 </div>
 
             </div>
@@ -43,10 +47,13 @@
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Estimate')"></Column>
                 <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Estimate')"></Column>
 
-                
-                <Column field="actual_material" header="តម្លៃសម្ភារជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')"></Column>
-                <Column field="actual_labor" header="តម្លៃពលកម្មជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')"></Column>
-                <Column field="actual_total" header="សរុបជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')"></Column>
+
+                <Column field="actual_material" header="តម្លៃសម្ភារជាក់ស្តែង"
+                    v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="actual_labor" header="តម្លៃពលកម្មជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')">
+                </Column>
+                <Column field="actual_total" header="សរុបជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')">
+                </Column>
 
                 <!-- <Column field="material" header="តម្លៃសម្ភារ" v-if="estimate_or_actual.includes('Margin')"></Column>
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Margin')"></Column>
@@ -60,7 +67,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getAll, getNext } from "@/apis/plan";
-
+import exportExcell from "@/services/download";
 const estimate_or_actual = ref(["Estimate", "", ""]);
 let nodes = ref([]);
 
@@ -88,7 +95,7 @@ const toNumber = (val) => Number(val.replace(/,/g, ""));
 const loadRoot = async () => {
     const response = await getAll({
         params: {
-            per_page: 20,
+            per_page: 200,
             order_field: 'created_at',
             order_by: 'asc'
         }
@@ -168,5 +175,9 @@ const loadRoot = async () => {
         }
         ];
     }
+};
+
+async function downloadExcel() {
+    await exportExcell('plan/export-excell', 'project-export-all');
 }
 </script>
