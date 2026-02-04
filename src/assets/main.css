@@ -4,9 +4,9 @@
 
 body, .p-treetable-column-title {
     font-family: "Noto Sans Khmer", Arial, sans-serif!important;
-    
+
 }
 
-.p-treetable-column-title,.p-treetable-body-cell-content {
-    font-size: 14px;
+.p-treetable-body-cell-content {
+    font-size: 15px;
 }
