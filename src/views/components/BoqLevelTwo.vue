@@ -14,11 +14,12 @@
                 </template>
             </Column>
             <Column field="title"></Column>
-            <Column field="count"   bodyStyle="text-align:right"></Column>
+            <Column field="count" bodyStyle="text-align:right"></Column>
         </DataTable>
     </div>
     <!-- Create Boq itesm -->
-    <Dialog v-model:visible="visibleBtn" maximizable modal :header="dataItem?.id > 0 ? 'Edit' : 'New'" :style="{ width: '30rem' }">
+    <Dialog v-model:visible="visibleBtn" maximizable modal :header="dataItem?.id > 0 ? 'Edit' : 'New'"
+        :style="{ width: '30rem' }">
         <Form class="w-full">
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col gap-2 mb-4">
@@ -40,7 +41,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';
@@ -50,7 +52,7 @@ const boqTwoStore = useLevelTwoStore();
 const boqItem = useBoqItemStore();
 
 const visibleBtn = ref(false);
-
+let userInfo = ref(null);
 let dataItem = ref({
     id: 0,
     parent_id: 0,
@@ -61,13 +63,7 @@ let dataItem = ref({
 const cm = ref();
 const selectedItem = ref();
 
-const menuModel = ref([
-    { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) },
-    { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) },
-    { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) },
-    { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) },
-    { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) }
-]);
+let menuModel = ref([]);
 
 const onRowSelect = async (value) => {
     await boqItem.getAll(value.data.id);
@@ -102,7 +98,7 @@ const copyBoqContext = async (row) => {
     }
 };
 
-const refreshBoqContext = async (row) =>{
+const refreshBoqContext = async (row) => {
     await boqTwoStore.getAll(row.value.parent_id);
 };
 
@@ -135,4 +131,15 @@ const submitForm = async () => {
     }
 };
 
+onMounted(async () => {
+    const info = await getUserInfoCookie();
+    userInfo = JSON.parse(info || '{}');
+    menuModel.value = [
+        { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
+        { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
+        { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
+        { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
+        { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) , visible: "admin,manger".includes(userInfo?.role) ? true : false}
+    ];
+});
 </script>

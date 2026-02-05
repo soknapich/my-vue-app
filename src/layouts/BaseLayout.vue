@@ -2,10 +2,10 @@
 <template>
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <aside   :class="[
-    'bg-white border-r shadow-sm flex flex-col transition-all duration-200 overflow-hidden',
-    collapsed ? 'w-0 -translate-x-full' : 'w-60 translate-x-0'
-  ]" aria-expanded="!collapsed">
+    <aside :class="[
+      'bg-white border-r shadow-sm flex flex-col transition-all duration-200 overflow-hidden',
+      collapsed ? 'w-0 -translate-x-full' : 'w-60 translate-x-0'
+    ]" aria-expanded="!collapsed">
       <div class="flex items-center justify-center px-3 py-2">
         <img src="@/assets/logo.png" alt="Profile" class="w-10 h-10 rounded-full border" />
         <!-- Toggle Button -->
@@ -19,14 +19,16 @@
       </div>
 
       <nav class="flex-1">
-        <RouterLink v-for="item in menuItems" :key="item.name" :to="item.to" :title="collapsed ? item.name : null"
-          class="flex items-center px-1 py-2 text-sm font-small transition-colors duration-150" :class="[
-            isActive(item.to) ? 'bg-green-700 text-white' : 'hover:bg-green-100 text-gray-800',
-            collapsed ? 'justify-center' : 'justify-start'
-          ]">
-          <component :is="item.icon" class="mr-1 w-5 h-5" />
-          <span v-if="!collapsed">{{ item.name }}</span>
-        </RouterLink>
+        <div v-for="item in menuItems" :key="item.name">
+          <RouterLink v-if="item.roles.includes(userInfo?.role)" :to="item.to" :title="collapsed ? item.name : null"
+            class="flex items-center px-1 py-2 text-sm font-small transition-colors duration-150" :class="[
+              isActive(item.to) ? 'bg-green-700 text-white' : 'hover:bg-green-100 text-gray-800',
+              collapsed ? 'justify-center' : 'justify-start'
+            ]">
+            <component :is="item.icon" class="mr-1 w-5 h-5" />
+            <span v-if="!collapsed">{{ item.name }}</span>
+          </RouterLink>
+        </div>
       </nav>
     </aside>
 
@@ -46,19 +48,19 @@
 <script setup lang="ts">
 
 import HeaderBar from "@/layouts/HeaderBar.vue";
-import { TableProperties, Menu, Settings, LayoutDashboard, ListTree } from "lucide-vue-next";
+import { Menu, Settings, LayoutDashboard, ListTree } from "lucide-vue-next";
 import { useRoute } from "vue-router";
-import { computed, ref } from "vue";
-
+import { computed, ref, onMounted } from "vue";
+import { getUserInfoCookie } from '@/services/authentication';
 
 const route = useRoute();
+let userInfo: any = null;
 
 const menuItems = [
-  { name: "Home", to: "/", icon: LayoutDashboard },
-  { name: "Boq Report", to: "/estimate", icon: ListTree },
-  // { name: "Actual", to: "/actual", icon: LayoutDashboard },
-  { name: "Boq Input", to: "/boq-input", icon: Menu },
-  { name: "Setting", to: "/setting", icon: Settings },
+  { name: "Home", to: "/", icon: LayoutDashboard, roles: ['admin', 'user'] },
+  { name: "Boq Report", to: "/estimate", icon: ListTree, roles: ['admin','manager'] },
+  { name: "Boq Input", to: "/boq-input", icon: Menu, roles: ['admin','manager', 'user'] },
+  { name: "Setting", to: "/setting", icon: Settings, roles: ['admin','manager'	] },
 ];
 
 const collapsed = ref(true);
@@ -80,4 +82,10 @@ const breadcrumbs = computed(() => {
   const parts = route.path.split("/").filter(Boolean);
   return parts.map((part) => part.toUpperCase());
 });
+
+onMounted(async () => {
+  const info = await getUserInfoCookie();
+  userInfo = JSON.parse(info || '{}');
+});
+
 </script>

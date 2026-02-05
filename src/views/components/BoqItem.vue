@@ -1,5 +1,6 @@
 <template>
     <div class="">
+        {{ userInfo?.role }}
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
             <!-- <Button icon="pi pi-plus" title="New" rounded size="small" @click="downloadExcel();" /> -->
             <Button icon="pi pi-plus" title="New" rounded size="small" @click="clearData();" />
@@ -173,11 +174,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';
-import exportExcell from "@/services/download";
 const boqTwoStore = useLevelTwoStore();
 const boqItem = useBoqItemStore();
 
@@ -186,7 +186,7 @@ const isSame = ref(false);
 const visibleBtnActual = ref(false);
 //Create new 
 const visibleBtn = ref(false);
-
+let userInfo = ref(null);
 let dataItemActual = ref({
     id: 0,
     actual_qty: 0,
@@ -227,14 +227,7 @@ let dataItem = ref({
 const cm = ref();
 const selectedItem = ref();
 
-const menuModel = ref([
-    { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) },
-    { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) },
-    { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) },
-    { label: 'Actual', icon: 'pi pi-fw pi-pencil', command: () => editBoqActualContext(selectedItem) },
-    { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) },
-    { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) }
-]);
+let menuModel = ref([]);
 
 const clearData = () => {
     dataItem = {
@@ -336,8 +329,18 @@ const submitActualForm = async () => {
     }
 };
 
-async function downloadExcel() {
-    await exportExcell('boq-item/export-excell', 'test');
-}
+onMounted(async () => {
+  const info = await getUserInfoCookie();
+  userInfo = JSON.parse(info || '{}');
+  menuModel.value = [
+    { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+    { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+    { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+    { label: 'Actual', icon: 'pi pi-fw pi-pencil', command: () => editBoqActualContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false },
+    { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem),visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+    { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false }
+  ];
+});
+
 
 </script>
