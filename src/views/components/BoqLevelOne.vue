@@ -41,12 +41,16 @@
     </Dialog>
 
     <MoveDialog v-if="levelOneStore.openDailog" />
+    <ConfirmDialog ref="confirmDeleteDialog" />
+    <ConfirmDialog ref="confirmCopyDialog" />
+
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { getUserInfoCookie } from '@/services/authentication';
 import MoveDialog from "@/views/components/MoveDialog.vue";
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from "@/stores/boqItem";
@@ -54,6 +58,9 @@ import { useBoqItemStore } from "@/stores/boqItem";
 const levelOneStore = useLevelOneStore();
 const levelTwoStore = useLevelTwoStore();
 const boqItemStore = useBoqItemStore();
+
+const confirmDeleteDialog = ref(null);
+const confirmCopyDialog = ref(null);
 
 const visibleBtn = ref(false);
 let userInfo = ref(null);
@@ -92,12 +99,18 @@ const newBoqContext = async (row) => {
     openModal(true);
 };
 
+const confirmCopy = async (id, house_id) => {
+  const result = await confirmCopyDialog.value.open({
+    title: 'Confirm',
+    message: 'Confirm copy?'
+  })
+  if (result) {
+    await levelOneStore.copyItem(id, house_id);
+  }
+};
+
 const copyBoqContext = async (row) => {
-    //alert('Under contruction: ' + row.value.id);
-    const result = confirm("Confirm copy!");
-    if (result) {
-        await levelOneStore.copyItem(row.value.id, row.value.house_id);
-    }
+    await confirmCopy(row.value.id, row.value.house_id);
 };
 
 const moveBoqItems = async (house_id) => {
@@ -115,11 +128,18 @@ const refreshBoqContext = async (row) => {
     await levelOneStore.getAll(row.value.house_id);
 };
 
+const confirmDelete = async (id, house_id) => {
+  const result = await confirmDeleteDialog.value.open({
+    title: 'Delete',
+    message: 'Are you sure?'
+  })
+  if (result) {
+    await levelOneStore.delete(id, house_id);
+  }
+};
+
 const deleteBoqContext = async (row) => {
-    const result = confirm("Are you sure you want to delete this item?");
-    if (result) {
-        await levelOneStore.delete(row.value.id, row.value.house_id);
-    }
+    await confirmDelete(row.value.id, row.value.house_id);
 };
 
 const editBoqContext = async (row) => {
