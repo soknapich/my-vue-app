@@ -38,10 +38,14 @@
         </Form>
     </Dialog>
 
+    <ConfirmDialog ref="confirmDeleteDialog" />
+    <ConfirmDialog ref="confirmCopyDialog" />
+
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelOneStore } from '@/stores/boqLevelOne';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
@@ -50,6 +54,9 @@ import { useBoqItemStore } from '@/stores/boqItem';
 const levelOneStore = useLevelOneStore();
 const boqTwoStore = useLevelTwoStore();
 const boqItem = useBoqItemStore();
+
+const confirmDeleteDialog = ref(null);
+const confirmCopyDialog = ref(null);
 
 const visibleBtn = ref(false);
 let userInfo = ref(null);
@@ -80,7 +87,7 @@ const openModal = (isNew) => {
 
     visibleBtn.value = true;
     boqTwoStore.errors = [];
-}
+};
 
 const onRowContextMenu = (event) => {
     cm.value.show(event.originalEvent);
@@ -90,23 +97,36 @@ const newBoqContext = async (row) => {
     openModal(true);
 };
 
-const copyBoqContext = async (row) => {
-    //alert('Under contruction: ' + row.value.id);
-    const result = confirm("Confirm copy!");
+const confirmCopy = async (id, parent_id) => {
+    const result = await confirmCopyDialog.value.open({
+        title: 'Confirm',
+        message: 'Confirm copy?'
+    })
     if (result) {
-        await boqTwoStore.copyItem(row.value.id, row.value.parent_id);
+        await boqTwoStore.copyItem(id, parent_id);
     }
+};
+
+const copyBoqContext = async (row) => {
+    await confirmCopy(row.value.id, row.value.parent_id);
 };
 
 const refreshBoqContext = async (row) => {
     await boqTwoStore.getAll(row.value.parent_id);
 };
 
-const deleteBoqContext = async (row) => {
-    const result = confirm("Are you sure you want to delete this item?");
+const confirmDelete = async (id, parent_id) => {
+    const result = await confirmDeleteDialog.value.open({
+        title: 'Delete',
+        message: 'Are you sure?'
+    })
     if (result) {
-        await boqTwoStore.delete(row.value.id, row.value.parent_id);
+        await boqTwoStore.delete(id, parent_id);
     }
+};
+
+const deleteBoqContext = async (row) => {
+    await confirmDelete(row.value.id, row.value.parent_id);
 };
 
 const editBoqContext = async (row) => {
@@ -135,11 +155,12 @@ onMounted(async () => {
     const info = await getUserInfoCookie();
     userInfo = JSON.parse(info || '{}');
     menuModel.value = [
-        { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
-        { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
-        { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
-        { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem) , visible: "admin,manger,user".includes(userInfo?.role) ? true : false},
-        { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem) , visible: "admin,manger".includes(userInfo?.role) ? true : false}
+        { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false }
     ];
 });
+
 </script>

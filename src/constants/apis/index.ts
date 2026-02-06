@@ -17,6 +17,8 @@ interface User {
   updateUser: ApiAction;
   getAllUser: ApiAction;
   getOneUser: ApiAction;
+  createConcept: ApiAction;
+  deleteConcept: ApiAction;
 }
 
 interface Plan {
@@ -96,6 +98,14 @@ const APIs: ApiConfig = {
     getOneUser: {
       url: 'user',
       method: 'get',
+    },
+    createConcept: {
+      url: 'user/concept',
+      method: 'post',
+    },
+    deleteConcept: {
+      url: 'user/concept',
+      method: 'delete',
     },
   },
 

@@ -131,7 +131,7 @@
         <Form class="w-full">
             <div class="flex flex-col mb-4">
                 <div class="flex gap-2">
-                    <Checkbox v-model="isSame" inputId="isSame" binary @change="onChecked"/>
+                    <Checkbox v-model="isSame" inputId="isSame" binary @change="onChecked" />
                     <label for="agree">Same as Estimate</label>
                 </div>
             </div>
@@ -170,10 +170,14 @@
         </Form>
     </Dialog>
 
+    <ConfirmDialog ref="confirmDeleteDialog" />
+    <ConfirmDialog ref="confirmCopyDialog" />
+
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
 import { useBoqItemStore } from '@/stores/boqItem';
@@ -186,6 +190,10 @@ const visibleBtnActual = ref(false);
 //Create new
 const visibleBtn = ref(false);
 let userInfo = ref(null);
+
+const confirmDeleteDialog = ref(null);
+const confirmCopyDialog = ref(null);
+
 let dataItemActual = ref({
     id: 0,
     actual_qty: 0,
@@ -194,9 +202,9 @@ let dataItemActual = ref({
     row: {}
 });
 
-const onChecked = (e) =>{
+const onChecked = (e) => {
     //alert(isSame.value);
-    if(isSame.value){
+    if (isSame.value) {
         dataItemActual = {
             id: dataItemActual.row.id,
             actual_qty: dataItemActual.row.qty_val,
@@ -206,7 +214,6 @@ const onChecked = (e) =>{
         };
     }
 };
-
 
 let dataItem = ref({
     id: 0,
@@ -220,7 +227,6 @@ let dataItem = ref({
     material: '',
     labor: ''
 });
-
 
 //Context menu
 const cm = ref();
@@ -253,23 +259,36 @@ const newBoqContext = async (row) => {
     clearData();
 };
 
-const copyBoqContext = async (row) => {
-    //alert('Under contruction: ' + row.value.id);\
-    const result = confirm("Confirm copy!");
+const confirmCopy = async (id, parent_id) => {
+    const result = await confirmCopyDialog.value.open({
+        title: 'Confirm',
+        message: 'Confirm copy?'
+    })
     if (result) {
-        await boqItem.copyItem(row.value.id, row.value.parent_id);
+        await boqItem.copyItem(id, parent_id);
     }
+};
+
+const copyBoqContext = async (row) => {
+    await confirmCopy(row.value.id, row.value.parent_id);
 };
 
 const refreshBoqContext = async (row) => {
     await boqItem.getAll(row.value.parent_id);
 };
 
-const deleteBoqContext = async (row) => {
-    const result = confirm("Are you sure you want to delete this item?");
+const confirmDelete = async (id, parent_id) => {
+    const result = await confirmDeleteDialog.value.open({
+        title: 'Delete',
+        message: 'Are you sure?'
+    })
     if (result) {
-        await boqItem.delete(row.value.id, row.value.parent_id);
+        await boqItem.delete(id, parent_id);
     }
+};
+
+const deleteBoqContext = async (row) => {
+    await confirmDelete(row.value.id, row.value.parent_id);
 };
 
 const editBoqContext = (row) => {
@@ -299,12 +318,12 @@ const editBoqActualContext = (row) => {
     isSame.value = false;
     const result = boqItem.items.find(res => res.id === row.value.id);
     dataItemActual = {
-            id: result.id,
-            actual_qty: result.actual_qty,
-            actual_material: result.actual_material,
-            actual_labor: result.actual_labor,
-            row: result
-        };
+        id: result.id,
+        actual_qty: result.actual_qty,
+        actual_material: result.actual_material,
+        actual_labor: result.actual_labor,
+        row: result
+    };
     visibleBtnActual.value = true;
 };
 
@@ -322,23 +341,23 @@ const submitForm = async () => {
 };
 
 const submitActualForm = async () => {
-    await boqItem.updateActual({...dataItemActual, level_id: boqTwoStore.selected.id});
+    await boqItem.updateActual({ ...dataItemActual, level_id: boqTwoStore.selected.id });
     if (boqItem.errors1.length == 0) {
         visibleBtnActual.value = false;
     }
 };
 
 onMounted(async () => {
-  const info = await getUserInfoCookie();
-  userInfo = JSON.parse(info || '{}');
-  menuModel.value = [
-    { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
-    { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
-    { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
-    { label: 'Actual', icon: 'pi pi-fw pi-pencil', command: () => editBoqActualContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false },
-    { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem),visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
-    { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false }
-  ];
+    const info = await getUserInfoCookie();
+    userInfo = JSON.parse(info || '{}');
+    menuModel.value = [
+        { label: 'New', icon: 'pi pi-fw pi-file', command: () => newBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Copy', icon: 'pi pi-fw pi-copy', command: () => copyBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Edit', icon: 'pi pi-fw pi-pencil', command: () => editBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Actual', icon: 'pi pi-fw pi-pencil', command: () => editBoqActualContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false },
+        { label: 'Refresh', icon: 'pi pi-fw pi-refresh', command: () => refreshBoqContext(selectedItem), visible: "admin,manger,user".includes(userInfo?.role) ? true : false },
+        { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false }
+    ];
 });
 
 
