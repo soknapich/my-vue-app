@@ -6,6 +6,11 @@ import LoginView from '@/views/LoginView.vue';
 import EstimateView from '@/views/EstimateView.vue';
 import BoqInputView from '@/views/BoqInputView.vue';
 import SettingView from '@/views/SettingView.vue';
+import Unauthorized from '@/components/Unauthorized.vue';
+
+import { getUserInfoCookie } from '@/services/authentication';
+const info = await getUserInfoCookie();
+const userInfo = JSON.parse(info || '{}');
 
 const routes = [
   {
@@ -20,7 +25,7 @@ const routes = [
       {
         path: '/',
         name: 'home',
-        component: HomeView,
+        component: ['admin','manger','user'].includes(userInfo?.role) ? HomeView : Unauthorized,
         meta: {
           requiresAuth: true
         }
@@ -28,7 +33,7 @@ const routes = [
       {
         path: '/estimate',
         name: 'estimate',
-        component: EstimateView,
+        component: ['admin', 'manager'].includes(userInfo?.role) ? EstimateView : Unauthorized,
         meta: {
           requiresAuth: true
         }
@@ -36,7 +41,7 @@ const routes = [
       {
         path: '/actual',
         name: 'actual',
-        component: ActualView,
+        component:  ['admin', 'manager','user'].includes(userInfo?.role) ? ActualView : Unauthorized,
         meta: {
           requiresAuth: true
         }
@@ -44,7 +49,7 @@ const routes = [
       {
         path: '/boq-input',
         name: 'boq-input',
-        component: BoqInputView,
+        component: ['admin', 'manager', 'user'].includes(userInfo?.role) ? BoqInputView: Unauthorized,
         meta: {
           requiresAuth: true
         }
@@ -52,7 +57,7 @@ const routes = [
             {
         path: '/setting',
         name: 'setting',
-        component: SettingView,
+        component:['admin', 'manager'].includes(userInfo?.role) ? SettingView: Unauthorized,
         meta: {
           requiresAuth: true
         }

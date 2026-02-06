@@ -1,6 +1,5 @@
 <template>
     <div class="">
-        {{ userInfo?.role }}
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
             <!-- <Button icon="pi pi-plus" title="New" rounded size="small" @click="downloadExcel();" /> -->
             <Button icon="pi pi-plus" title="New" rounded size="small" @click="clearData();" />
@@ -184,7 +183,7 @@ const boqItem = useBoqItemStore();
 const estimate_or_actual = ref(["Estimate", "Actual"]);
 const isSame = ref(false);
 const visibleBtnActual = ref(false);
-//Create new 
+//Create new
 const visibleBtn = ref(false);
 let userInfo = ref(null);
 let dataItemActual = ref({
