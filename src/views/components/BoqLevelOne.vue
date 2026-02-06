@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="flex flex-column justify-end gap-2" v-if="levelOneStore.houseId">
-            <Button icon="pi pi-copy" title="Copy All" rounded size="small"
+            <Button icon="pi pi-copy" title="Duplicate" rounded text
                 @click="moveBoqItems(levelOneStore.houseId)" />
-            <Button icon="pi pi-plus" title="New" rounded size="small" @click="openModal(true)" />
+            <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
         <DataTable v-model:selection="levelOneStore.selected" @rowSelect="onRowSelect" contextMenu

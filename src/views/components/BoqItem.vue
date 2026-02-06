@@ -1,8 +1,8 @@
 <template>
     <div class="">
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
-            <!-- <Button icon="pi pi-plus" title="New" rounded size="small" @click="downloadExcel();" /> -->
-            <Button icon="pi pi-plus" title="New" rounded size="small" @click="clearData();" />
+            <!-- <Button icon="pi pi-plus" title="New" rounded text @click="downloadExcel();" /> -->
+            <Button icon="pi pi-plus" title="New" rounded text @click="clearData();" />
         </div>
 
         <div class="card flex flex-wrap justify-center gap-4">
