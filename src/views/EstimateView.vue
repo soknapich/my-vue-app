@@ -53,7 +53,8 @@
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Estimate')"></Column>
                 <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Estimate')"></Column>
 
-
+                <Column field="actual_qty" header="បរិមាណជាក់ស្តែង"
+                v-if="estimate_or_actual.includes('Actual')"></Column>
                 <Column field="actual_material" header="តម្លៃសម្ភារជាក់ស្តែង"
                     v-if="estimate_or_actual.includes('Actual')"></Column>
                 <Column field="actual_labor" header="តម្លៃពលកម្មជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')">
@@ -65,10 +66,13 @@
             <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Margin')"></Column>
             <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Margin')"></Column> -->
 
-                <Column field="export" header="Action">
+                <Column field="export" header="ទាញយក">
                     <template #body="slotProps">
                         <Button icon="pi pi-cloud-download" v-if="slotProps.node.icon !== 'pi pi-star'" rounded text
                             @click="downloadExcelByPlanId(slotProps.node.data.id, slotProps.node.icon, slotProps.node.data.title)" />
+
+                            <Button icon="pi pi-eye" severity="danger" v-if="slotProps.node.icon === 'pi pi-star'" rounded text
+                            @click="alert(slotProps.node.data.title)" />
                     </template>
                 </Column>
 
@@ -166,9 +170,9 @@ const loadRoot = async () => {
             "key": 2133,
             "id": 2133,
             "name": "TOTAL:",
-            "material": sumMaterial,
-            "labor": sumLabor,
-            "total": sumTotal,
+            "material": `$ ${sumMaterial}`,
+            "labor": `$ ${sumLabor}`,
+            "total": `$ ${sumTotal}`,
             "data": {
                 "id": 2133,
                 "title": "TOTAL:",
@@ -177,12 +181,12 @@ const loadRoot = async () => {
                 "size": "",
                 "unit": "",
                 "qty": "",
-                "material": sumMaterial,
-                "labor": sumLabor,
-                "total": sumTotal,
-                "actual_material": sumActualMaterial,
-                "actual_labor": sumActualLabor,
-                "actual_total": sumActualTotal,
+                "material": `$ ${sumMaterial}`,
+                "labor": `$ ${sumLabor}`,
+                "total": `$ ${sumTotal}`,
+                "actual_material": `$ ${sumActualMaterial}`,
+                "actual_labor": `$ ${sumActualLabor}`,
+                "actual_total": `$ ${sumActualTotal}`,
             },
             "url": "",
             "icon": "pi pi-dollar",

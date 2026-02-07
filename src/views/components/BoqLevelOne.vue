@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex flex-column justify-end gap-2" v-if="levelOneStore.houseId">
+        <div class="flex flex-column justify-end gap-1" v-if="levelOneStore.houseId">
             <Button icon="pi pi-copy" title="Duplicate" rounded text
                 @click="moveBoqItems(levelOneStore.houseId)" />
             <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />

@@ -34,12 +34,12 @@
             <Column field="size" header="Size"></Column>
             <Column field="unit" header="Unit"></Column>
             <Column field="qty_val" header="Qty" v-if="estimate_or_actual.includes('Estimate')"></Column>
-            <Column field="material_val" header="Material" v-if="estimate_or_actual.includes('Estimate')"></Column>
-            <Column field="labor_val" header="Labor" v-if="estimate_or_actual.includes('Estimate')"></Column>
+            <Column field="material_val" header="Material Cost" v-if="estimate_or_actual.includes('Estimate')"></Column>
+            <Column field="labor_val" header="Labor Cost" v-if="estimate_or_actual.includes('Estimate')"></Column>
             <Column field="actual_qty" header="Actual Qty" v-if="estimate_or_actual.includes('Actual')"></Column>
-            <Column field="actual_material" header="Actual Material" v-if="estimate_or_actual.includes('Actual')">
+            <Column field="actual_material" header="Actual Material Cost" v-if="estimate_or_actual.includes('Actual')">
             </Column>
-            <Column field="actual_labor" header="Actual Labor" v-if="estimate_or_actual.includes('Actual')"></Column>
+            <Column field="actual_labor" header="Actual Labor Cost" v-if="estimate_or_actual.includes('Actual')"></Column>
         </DataTable>
     </div>
 
@@ -100,14 +100,14 @@
                 <div class="flex flex-col gap-2 mt-2">
                     <div class="grid grid-cols-12 gap-2">
                         <div class="col-span-12 md:col-span-6">
-                            <label for="material" class="font-semibold">Material Unit <span
+                            <label for="material" class="font-semibold">Material Cost <span
                                     class="text-red-500">*</span></label>
                             <InputNumber id="material" v-model="dataItem.material" size="small" class="flex-auto"
                                 mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.material?.[0] }}</span>
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <label for="labor" class="font-semibold">Labor Unit <span
+                            <label for="labor" class="font-semibold">Labor Cost <span
                                     class="text-red-500">*</span></label>
                             <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
                                 mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
@@ -140,13 +140,13 @@
                 <div class="flex flex-col">
                     <label for="title" class="font-semibold">Actual Qty <span class="text-red-500">*</span></label>
                     <InputNumber id="actual_qty" v-model="dataItemActual.actual_qty" size="small" class="flex-auto"
-                        mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
+                    autocomplete="off" inputId="locale-us" locale="en-US" :minFractionDigits="1" fluid />
                     <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_qty?.[0] }}</span>
                 </div>
             </div>
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col">
-                    <label for="title" class="font-semibold">Actual Material <span class="text-red-500">*</span></label>
+                    <label for="title" class="font-semibold">Actual Material Cost <span class="text-red-500">*</span></label>
                     <InputNumber id="actual_qty" v-model="dataItemActual.actual_material" size="small" class="flex-auto"
                         mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                     <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_material?.[0] }}</span>
@@ -154,7 +154,7 @@
             </div>
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col">
-                    <label for="title" class="font-semibold">Actual Labor <span class="text-red-500">*</span></label>
+                    <label for="title" class="font-semibold">Actual Labor Cost <span class="text-red-500">*</span></label>
                     <InputNumber id="actual_qty" v-model="dataItemActual.actual_labor" size="small" class="flex-auto"
                         mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                     <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_labor?.[0] }}</span>
@@ -184,7 +184,7 @@ import { useBoqItemStore } from '@/stores/boqItem';
 const boqTwoStore = useLevelTwoStore();
 const boqItem = useBoqItemStore();
 
-const estimate_or_actual = ref(["Estimate", "Actual"]);
+const estimate_or_actual = ref(["Estimate", ""]);
 const isSame = ref(false);
 const visibleBtnActual = ref(false);
 //Create new

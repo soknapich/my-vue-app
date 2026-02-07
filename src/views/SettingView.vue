@@ -1,5 +1,5 @@
 <template>
-  <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">User and Role</h2>
+  <h2 class="text-xl font-semibold text-gray-800 ml-2 m-2">Allow User</h2>
   <div class="overflow-x-auto">
     <div class="card mb-2">
       <div class="grid grid-cols-12 gap-1">
@@ -17,7 +17,7 @@
               <Column field="role" header="Role"></Column>
               <Column field="is_allow" header="Allow">
                 <template #body="slotProps">
-                  <Button label="Actived" @click="confirmDisable(slotProps?.data?.id, slotProps?.data?.is_allow)"
+                  <Button label="Enabled" @click="confirmDisable(slotProps?.data?.id, slotProps?.data?.is_allow)"
                     size="small" severity="success" text v-if="slotProps?.data?.is_allow" />
                   <Button label="Disabled" @click="confirmDisable(slotProps?.data?.id, slotProps?.data?.is_allow)"
                     size="small" severity="danger" text v-if="!slotProps?.data?.is_allow" />

@@ -48,7 +48,7 @@
 <script setup lang="ts">
 
 import HeaderBar from "@/layouts/HeaderBar.vue";
-import { Menu, Settings, LayoutDashboard, ListTree } from "lucide-vue-next";
+import { Menu, Settings, LayoutDashboard, ListTree, Database } from "lucide-vue-next";
 import { useRoute } from "vue-router";
 import { computed, ref, onMounted } from "vue";
 import { getUserInfoCookie } from '@/services/authentication';
@@ -59,7 +59,7 @@ let userInfo: any = null;
 const menuItems = [
   { name: "Home", to: "/", icon: LayoutDashboard, roles: ['admin', 'user'] },
   { name: "Boq Report", to: "/estimate", icon: ListTree, roles: ['admin','manager'] },
-  { name: "Boq Input", to: "/boq-input", icon: Menu, roles: ['admin','manager', 'user'] },
+  { name: "Boq Input", to: "/boq-input", icon: Database, roles: ['admin','manager', 'user'] },
   { name: "Setting", to: "/setting", icon: Settings, roles: ['admin','manager'	] },
 ];
 
