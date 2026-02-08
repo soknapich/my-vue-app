@@ -53,8 +53,8 @@
                 <Column field="labor" header="តម្លៃពលកម្ម" v-if="estimate_or_actual.includes('Estimate')"></Column>
                 <Column field="total" header="សរុប" v-if="estimate_or_actual.includes('Estimate')"></Column>
 
-                <Column field="actual_qty" header="បរិមាណជាក់ស្តែង"
-                v-if="estimate_or_actual.includes('Actual')"></Column>
+                <Column field="actual_qty" header="បរិមាណជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')">
+                </Column>
                 <Column field="actual_material" header="តម្លៃសម្ភារជាក់ស្តែង"
                     v-if="estimate_or_actual.includes('Actual')"></Column>
                 <Column field="actual_labor" header="តម្លៃពលកម្មជាក់ស្តែង" v-if="estimate_or_actual.includes('Actual')">
@@ -71,14 +71,19 @@
                         <Button icon="pi pi-cloud-download" v-if="slotProps.node.icon !== 'pi pi-star'" rounded text
                             @click="downloadExcelByPlanId(slotProps.node.data.id, slotProps.node.icon, slotProps.node.data.title)" />
 
-                            <Button icon="pi pi-eye" severity="danger" v-if="slotProps.node.icon === 'pi pi-star'" rounded text
-                            @click="alert(slotProps.node.data.title)" />
+                        <Button icon="pi pi-eye" severity="danger" v-if="slotProps.node.icon === 'pi pi-star'" rounded
+                            text @click=" boqItemDetails = slotProps.node.data; visibleDialog = true;" />
                     </template>
                 </Column>
 
             </TreeTable>
         </div>
     </div>
+
+    <!-- Create Boq itesm -->
+    <Dialog v-model:visible="visibleDialog" maximizable modal header="Boq Details" :style="{ width: '50rem' }">
+        <BoqItemDetail :data="boqItemDetails"/>
+    </Dialog>
 </template>
 
 
@@ -86,6 +91,9 @@
 import { ref, onMounted } from "vue";
 import { getAll, getNext } from "@/apis/plan";
 import exportExcell from "@/services/download";
+import BoqItemDetail from "@/views/components/BoqItemDetail.vue";
+const boqItemDetails = ref({});
+const visibleDialog = ref(false);
 const estimate_or_actual = ref(["Estimate", "", ""]);
 let nodes = ref([]);
 
