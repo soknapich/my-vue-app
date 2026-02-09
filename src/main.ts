@@ -51,7 +51,10 @@ app.component('Checkbox', Checkbox);
 
 app.use(PrimeVue, {
     theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+           darkModeSelector: false   // ✅ disable auto dark mode
+       }
     }
 });
 app.use(ConfirmationService);
