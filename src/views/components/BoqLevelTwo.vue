@@ -8,6 +8,12 @@
             v-model:contextMenuSelection="selectedItem" @rowContextmenu="onRowContextMenu" scrollable
             scrollHeight="300px" selectionMode="single" :value="boqTwoStore.items" size="small"
             v-if="boqTwoStore.items.length > 0">
+            <!-- Checkbox Column -->
+            <Column>
+              <template #body="slotProps">
+                <Checkbox v-model="slotProps.data.checked" binary />
+              </template>
+            </Column>
             <Column style="width:50px">
                 <template #body="{ index }">
                     {{ index + 1 }}

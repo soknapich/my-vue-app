@@ -23,6 +23,12 @@
         <DataTable scrollHeight="350px" scrollable contextMenu v-model:contextMenuSelection="selectedItem"
             @rowContextmenu="onRowContextMenu" selectionMode="single" :value="boqItem.items" size="small"
             v-if="boqItem.items?.length > 0">
+            <!-- Checkbox Column -->
+            <Column>
+              <template #body="slotProps">
+                <Checkbox v-model="slotProps.data.checked" binary />
+              </template>
+            </Column>
             <Column header="#" style="width:50px">
                 <template #body="{ index }">
                     {{ index + 1 }}
