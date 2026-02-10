@@ -54,3 +54,13 @@ export function updateActualItem(id: any, data: any) {
     params: data.params,
   });
 }
+
+export function copyMultipleBoqItem(ids: number[]) {
+  return request({
+    url: `${APIs.boqItem.copyMultipleBoqItem.url}`,
+    method: APIs.boqItem.copyMultipleBoqItem.method,
+    data: {
+      ids
+    }
+  });
+}

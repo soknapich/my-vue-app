@@ -46,3 +46,13 @@ export function copyAllBoqLevel1(data: any) {
     params: data.params
   });
 }
+
+export function copyMultipleBoqLevel1(ids: number[]) {
+  return request({
+    url: `${APIs.boqLevel1.copyMultipleBoqLevel1.url}`,
+    method: APIs.boqLevel1.copyMultipleBoqLevel1.method,
+    data: {
+      ids
+    }
+  });
+}

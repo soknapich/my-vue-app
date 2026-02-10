@@ -1,6 +1,10 @@
 <template>
     <div>
+        <!-- {{ boqTwoStore.items.filter(res=>res.checked).map(res=>res.id) }} -->
         <div class="flex flex-column justify-end" v-if="levelOneStore.selected">
+            <Button icon="pi pi-copy" severity="danger" v-if="boqTwoStore.items.filter(res=>res.checked).map(res=>res.id).length > 0"
+                title="Duplicate" rounded text
+                @click="copyMultipleBoq(boqTwoStore.items.filter(res=>res.checked).map(res=>res.id), levelOneStore.selected)" />
             <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -11,7 +15,7 @@
             <!-- Checkbox Column -->
             <Column>
               <template #body="slotProps">
-                <Checkbox v-model="slotProps.data.checked" binary />
+                <Checkbox v-model="slotProps.data.checked" binary size="small"/>
               </template>
             </Column>
             <Column style="width:50px">
@@ -115,6 +119,18 @@ const confirmCopy = async (id, parent_id) => {
 
 const copyBoqContext = async (row) => {
     await confirmCopy(row.value.id, row.value.parent_id);
+};
+
+const copyMultipleBoq = async (ids, level_id) => {
+
+    const result = await confirmCopyDialog.value.open({
+        title: 'Confirm',
+        message: 'Confirm copy?'
+    })
+    if (result) {
+        await boqTwoStore.copyMultipleItems(ids, level_id.id);
+    }
+
 };
 
 const refreshBoqContext = async (row) => {

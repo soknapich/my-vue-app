@@ -1,7 +1,10 @@
 <template>
     <div class="">
+        <!-- {{boqItem.items.filter(res => res.checked).map(res => res.id)}} -->
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
-            <!-- <Button icon="pi pi-plus" title="New" rounded text @click="downloadExcel();" /> -->
+            <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
+                title="Duplicate" rounded text
+                @click="copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected)" />
             <Button icon="pi pi-plus" title="New" rounded text @click="clearData();" />
         </div>
 
@@ -25,9 +28,9 @@
             v-if="boqItem.items?.length > 0">
             <!-- Checkbox Column -->
             <Column>
-              <template #body="slotProps">
-                <Checkbox v-model="slotProps.data.checked" binary />
-              </template>
+                <template #body="slotProps">
+                    <Checkbox v-model="slotProps.data.checked" binary size="small" />
+                </template>
             </Column>
             <Column header="#" style="width:50px">
                 <template #body="{ index }">
@@ -45,7 +48,8 @@
             <Column field="actual_qty" header="Actual Qty" v-if="estimate_or_actual.includes('Actual')"></Column>
             <Column field="actual_material" header="Actual Material Cost" v-if="estimate_or_actual.includes('Actual')">
             </Column>
-            <Column field="actual_labor" header="Actual Labor Cost" v-if="estimate_or_actual.includes('Actual')"></Column>
+            <Column field="actual_labor" header="Actual Labor Cost" v-if="estimate_or_actual.includes('Actual')">
+            </Column>
         </DataTable>
     </div>
 
@@ -146,13 +150,14 @@
                 <div class="flex flex-col">
                     <label for="title" class="font-semibold">Actual Qty <span class="text-red-500">*</span></label>
                     <InputNumber id="actual_qty" v-model="dataItemActual.actual_qty" size="small" class="flex-auto"
-                    autocomplete="off" inputId="locale-us" locale="en-US" :minFractionDigits="1" fluid />
+                        autocomplete="off" inputId="locale-us" locale="en-US" :minFractionDigits="1" fluid />
                     <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_qty?.[0] }}</span>
                 </div>
             </div>
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col">
-                    <label for="title" class="font-semibold">Actual Material Cost <span class="text-red-500">*</span></label>
+                    <label for="title" class="font-semibold">Actual Material Cost <span
+                            class="text-red-500">*</span></label>
                     <InputNumber id="actual_qty" v-model="dataItemActual.actual_material" size="small" class="flex-auto"
                         mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                     <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_material?.[0] }}</span>
@@ -160,7 +165,8 @@
             </div>
             <div class="flex flex-col mb-4">
                 <div class="flex flex-col">
-                    <label for="title" class="font-semibold">Actual Labor Cost <span class="text-red-500">*</span></label>
+                    <label for="title" class="font-semibold">Actual Labor Cost <span
+                            class="text-red-500">*</span></label>
                     <InputNumber id="actual_qty" v-model="dataItemActual.actual_labor" size="small" class="flex-auto"
                         mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                     <span class="text-red-500 text-sm">{{ boqItem.errors1.actual_labor?.[0] }}</span>
@@ -277,6 +283,17 @@ const confirmCopy = async (id, parent_id) => {
 
 const copyBoqContext = async (row) => {
     await confirmCopy(row.value.id, row.value.parent_id);
+};
+
+const copyMultipleBoq = async (ids, level_id) => {
+
+    const result = await confirmCopyDialog.value.open({
+        title: 'Confirm',
+        message: 'Confirm copy?'
+    })
+    if (result) {
+        await boqItem.copyMultipleItems(ids, level_id.id);
+    }
 };
 
 const refreshBoqContext = async (row) => {

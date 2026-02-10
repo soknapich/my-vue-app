@@ -33,6 +33,7 @@ interface BoqLevel1 {
   deleteBoqLevel1: ApiAction;
   copyBoqLevel1: ApiAction;
   copyAllBoqLevel1: ApiAction;
+  copyMultipleBoqLevel1: ApiAction;
 }
 
 interface BoqLevel2 {
@@ -41,7 +42,8 @@ interface BoqLevel2 {
   updateBoqLevel2: ApiAction;
   getOneBoqLevel2: ApiAction;
   deleteBoqLevel2: ApiAction;
-  copyBoqLevel2: ApiAction
+  copyBoqLevel2: ApiAction;
+  copyMultipleBoqLevel2: ApiAction;
 }
 
 interface BoqItem {
@@ -50,6 +52,7 @@ interface BoqItem {
   updateActualBoqItem: ApiAction;
   deleteBoqItem: ApiAction;
   copyBoqItem: ApiAction;
+  copyMultipleBoqItem: ApiAction;
 }
 
 
@@ -145,6 +148,10 @@ const APIs: ApiConfig = {
       url: 'boq-level-one/copy-all',
       method: 'post',
     },
+    copyMultipleBoqLevel1: {
+      url: 'boq-level-one/copy-multiple',
+      method: 'post',
+    },
   },
   
   boqLevel2: {
@@ -167,6 +174,10 @@ const APIs: ApiConfig = {
     copyBoqLevel2: {
       url: 'boq-level-two',
       method: 'patch'
+    },
+    copyMultipleBoqLevel2: {
+      url: 'boq-level-two/copy-multiple',
+      method: 'post'
     },
     getOneBoqLevel2: {
       url: 'boq-level-two',
@@ -194,6 +205,10 @@ const APIs: ApiConfig = {
     copyBoqItem: {
       url: 'boq-item',
       method: 'patch'
+    },
+    copyMultipleBoqItem: {
+      url: 'boq-item/copy-multiple',
+      method: 'post'
     }
   }
 

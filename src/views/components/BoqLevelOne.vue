@@ -1,8 +1,10 @@
 <template>
     <div>
+        <!-- {{ levelOneStore.items.filter(res=>res.checked).map(res=>res.id) }} -->
         <div class="flex flex-column justify-end gap-1" v-if="levelOneStore.houseId">
-            <Button icon="pi pi-copy" title="Duplicate" rounded text
-                @click="moveBoqItems(levelOneStore.houseId)" />
+            <Button icon="pi pi-copy" severity="danger" v-if="levelOneStore.items.filter(res => res.checked).map(res => res.id).length > 0"
+                title="Duplicate" rounded text
+                @click="copyMultipleBoq(levelOneStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.houseId)" />
             <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
@@ -12,9 +14,9 @@
             v-if="levelOneStore.items?.length > 0">
             <!-- Checkbox Column -->
             <Column>
-              <template #body="slotProps">
-                <Checkbox v-model="slotProps.data.checked" binary />
-              </template>
+                <template #body="slotProps">
+                    <Checkbox v-model="slotProps.data.checked" binary size="small" />
+                </template>
             </Column>
             <Column style="width:50px">
                 <template #body="{ index }">
@@ -106,17 +108,28 @@ const newBoqContext = async (row) => {
 };
 
 const confirmCopy = async (id, house_id) => {
-  const result = await confirmCopyDialog.value.open({
-    title: 'Confirm',
-    message: 'Confirm copy?'
-  })
-  if (result) {
-    await levelOneStore.copyItem(id, house_id);
-  }
+    const result = await confirmCopyDialog.value.open({
+        title: 'Confirm',
+        message: 'Confirm copy?'
+    })
+    if (result) {
+        await levelOneStore.copyItem(id, house_id);
+    }
 };
 
 const copyBoqContext = async (row) => {
     await confirmCopy(row.value.id, row.value.house_id);
+};
+
+const copyMultipleBoq = async (ids, house_id) => {
+    const result = await confirmCopyDialog.value.open({
+        title: 'Confirm',
+        message: 'Confirm copy?'
+    })
+    if (result) {
+        await levelOneStore.copyMultipleItems(ids, house_id);
+    }
+
 };
 
 const moveBoqItems = async (house_id) => {
@@ -135,13 +148,13 @@ const refreshBoqContext = async (row) => {
 };
 
 const confirmDelete = async (id, house_id) => {
-  const result = await confirmDeleteDialog.value.open({
-    title: 'Delete',
-    message: 'Are you sure?'
-  })
-  if (result) {
-    await levelOneStore.delete(id, house_id);
-  }
+    const result = await confirmDeleteDialog.value.open({
+        title: 'Delete',
+        message: 'Are you sure?'
+    })
+    if (result) {
+        await levelOneStore.delete(id, house_id);
+    }
 };
 
 const deleteBoqContext = async (row) => {

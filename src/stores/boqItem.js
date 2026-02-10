@@ -1,6 +1,14 @@
 // stores/loading.js
 import { defineStore } from "pinia";
-import { getNext, createItem, updateItem, deletItem, copyItem, updateActualItem } from "@/apis/plan";
+import { 
+  getNext,
+  createItem,
+  updateItem, 
+  deletItem,
+  copyItem,
+  updateActualItem,
+  copyMultipleBoqItem
+} from "@/apis/plan";
 
 export const useBoqItemStore = defineStore("boqItem", {
   state: () => ({
@@ -75,6 +83,11 @@ export const useBoqItemStore = defineStore("boqItem", {
         this.errors1 = [];
         await this.getAll(data.level_id);
       }
+    },
+
+    async copyMultipleItems(ids, parent_id) {
+      await copyMultipleBoqItem(ids);
+      await this.getAll(parent_id);
     },
 
   },

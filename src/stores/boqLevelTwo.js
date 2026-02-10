@@ -5,7 +5,8 @@ import {
   createBoqLevel2,
   updateBoqLevel2,
   deletBoqLevel2,
-  copyBoqLevel2
+  copyBoqLevel2,
+  copyMultipleBoqLevel2
 } from "@/apis/boq-level-two";
 
 export const useLevelTwoStore = defineStore("boqItems", {
@@ -70,6 +71,11 @@ export const useLevelTwoStore = defineStore("boqItems", {
       await this.getAll(levelId);
     },
 
+    async copyMultipleItems(ids, levelId) {
+      //console.log({params: ids});
+      await copyMultipleBoqLevel2(ids);
+      await this.getAll(levelId);
+    },
 
   },
 });
