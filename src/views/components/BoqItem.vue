@@ -2,10 +2,18 @@
     <div class="">
         <!-- {{boqItem.items.filter(res => res.checked).map(res => res.id)}} -->
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
-            <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
+
+        <Button icon="pi pi-ellipsis-v"  rounded text tile="New"
+         @click="toggle"
+         aria-haspopup="true"
+         aria-controls="overlay_menu"/>
+         <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
+
+          <!--  <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
                 title="Duplicate" rounded text
                 @click="copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected)" />
-            <Button icon="pi pi-plus" title="New" rounded text @click="clearData();" />
+            <Button icon="pi pi-plus" title="New" rounded text @click="createNewItem();" />
+             -->
         </div>
 
         <div class="card flex flex-wrap justify-center gap-4">
@@ -246,7 +254,7 @@ const selectedItem = ref();
 
 let menuModel = ref([]);
 
-const clearData = () => {
+const createNewItem = () => {
     dataItem = {
         id: 0,
         level_id: 0,
@@ -268,7 +276,7 @@ const onRowContextMenu = (event) => {
 };
 
 const newBoqContext = async (row) => {
-    clearData();
+    createNewItem();
 };
 
 const confirmCopy = async (id, parent_id) => {
@@ -383,5 +391,34 @@ onMounted(async () => {
     ];
 });
 
-
+//Menu
+const menuBar = ref();
+const mItems = ref([
+  {
+    // label: 'Options',
+    items: [
+      {
+        label: 'New',
+        icon: 'pi pi-plus',
+        command: (ev) => {
+          createNewItem();
+        },
+      },
+      {
+        label: 'Copy',
+        icon: 'pi pi-copy',
+        command: (ev) => {
+          if(boqItem.items.filter(res => res.checked).map(res => res.id).length > 0){
+            copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected);
+          }else{
+            alert("Please select item!");
+          }
+        },
+      },
+    ],
+  },
+]);
+const toggle = (event) => {
+  menuBar.value.toggle(event);
+};
 </script>
