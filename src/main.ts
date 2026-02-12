@@ -27,6 +27,8 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmationService from 'primevue/confirmationservice';
 import Checkbox from 'primevue/checkbox';
 import Menu from 'primevue/menu';
+import InputGroup from 'primevue/inputgroup'
+import InputGroupAddon from 'primevue/inputgroupaddon'
 
 const app = createApp(App);
 // 1️⃣ Create Pinia instance
@@ -50,6 +52,8 @@ app.component('Form', Form);
 app.component('ConfirmDialog', ConfirmDialog);
 app.component('Checkbox', Checkbox);
 app.component('Menu', Menu);
+app.component('InputGroup', InputGroup);
+app.component('InputGroupAddon', InputGroupAddon);
 
 app.use(PrimeVue, {
     theme: {
