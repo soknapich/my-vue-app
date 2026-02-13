@@ -2,10 +2,18 @@
     <div>
         <!-- {{ boqTwoStore.items.filter(res=>res.checked).map(res=>res.id) }} -->
         <div class="flex flex-column justify-end" v-if="levelOneStore.selected">
-            <Button icon="pi pi-copy" severity="danger" v-if="boqTwoStore.items.filter(res=>res.checked).map(res=>res.id).length > 0"
-                title="Duplicate" rounded text
-                @click="copyMultipleBoq(boqTwoStore.items.filter(res=>res.checked).map(res=>res.id), levelOneStore.selected)" />
-            <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
+            <Button icon="pi pi-ellipsis-v"  rounded text tile="New"
+             @click="toggle"
+             aria-haspopup="true"
+             aria-controls="overlay_menu"/>
+             <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
+
+             <!--
+              <Button icon="pi pi-copy" severity="danger" v-if="boqTwoStore.items.filter(res=>res.checked).map(res=>res.id).length > 0"
+                  title="Duplicate" rounded text
+                  @click="copyMultipleBoq(boqTwoStore.items.filter(res=>res.checked).map(res=>res.id), levelOneStore.selected)" />
+              <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
+            -->
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
         <DataTable v-model:selection="boqTwoStore.selected" @rowSelect="onRowSelect" contextMenu
@@ -184,5 +192,37 @@ onMounted(async () => {
         { label: 'Delete', icon: 'pi pi-fw pi-trash', command: () => deleteBoqContext(selectedItem), visible: "admin,manger".includes(userInfo?.role) ? true : false }
     ];
 });
+
+
+//Menu
+const menuBar = ref();
+const mItems = ref([
+  {
+    // label: 'Options',
+    items: [
+      {
+        label: 'New',
+        icon: 'pi pi-plus',
+        command: (ev) => {
+          openModal(true);
+        },
+      },
+      {
+        label: 'Copy',
+        icon: 'pi pi-copy',
+        command: (ev) => {
+          if(boqTwoStore.items.filter(res=>res.checked).map(res=>res.id).length > 0){
+            copyMultipleBoq(boqTwoStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.selected);
+          }else{
+            alert("Please select item!");
+          }
+        },
+      },
+    ],
+  },
+]);
+const toggle = (event) => {
+  menuBar.value.toggle(event);
+};
 
 </script>

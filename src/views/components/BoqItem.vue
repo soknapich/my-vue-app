@@ -2,10 +2,18 @@
     <div class="">
         <!-- {{boqItem.items.filter(res => res.checked).map(res => res.id)}} -->
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
-            <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
+
+        <Button icon="pi pi-ellipsis-v"  rounded text tile="New"
+         @click="toggle"
+         aria-haspopup="true"
+         aria-controls="overlay_menu"/>
+         <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
+
+          <!--  <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
                 title="Duplicate" rounded text
                 @click="copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected)" />
-            <Button icon="pi pi-plus" title="New" rounded text @click="clearData();" />
+            <Button icon="pi pi-plus" title="New" rounded text @click="createNewItem();" />
+             -->
         </div>
 
         <div class="card flex flex-wrap justify-center gap-4">
@@ -119,11 +127,31 @@
                         <div class="col-span-12 md:col-span-6">
                             <label for="labor" class="font-semibold">Labor Cost <span
                                     class="text-red-500">*</span></label>
-                            <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
+
+                                    <InputGroup>
+                                           <InputNumber
+                                             v-model="displayValue"
+                                             id="labor"
+                                             mode="currency"
+                                             :currency="checked1 ? 'KHR' : 'USD'"
+                                             locale="en-US"
+                                             size="small"
+                                           />
+                                         <InputGroupAddon>
+                                           <Checkbox v-model="checked1" binary size="small" title="Switch currency USD / KHR"/>
+                                         </InputGroupAddon>
+                                   </InputGroup>
+                                     <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
+
+                              <!--  <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
                                 mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
+                            -->
 
                         </div>
+                        <div class="col-span-12 md:col-span-6">
+
+                       </div>
 
                     </div>
                 </div>
@@ -188,7 +216,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
@@ -235,9 +263,9 @@ let dataItem = ref({
     brand: '',
     unit: '',
     size: '',
-    qty: '',
-    material: '',
-    labor: ''
+    qty: 0,
+    material: 0,
+    labor: 0
 });
 
 //Context menu
@@ -246,7 +274,7 @@ const selectedItem = ref();
 
 let menuModel = ref([]);
 
-const clearData = () => {
+const createNewItem = () => {
     dataItem = {
         id: 0,
         level_id: 0,
@@ -255,11 +283,11 @@ const clearData = () => {
         brand: '',
         size: '',
         unit: '',
-        qty: '',
-        material: '',
-        labor: ''
+        qty: 0,
+        material: 0,
+        labor: 0
     };
-
+    usdValue.value = 0;
     visibleBtn.value = true;
 };
 
@@ -268,7 +296,7 @@ const onRowContextMenu = (event) => {
 };
 
 const newBoqContext = async (row) => {
-    clearData();
+    createNewItem();
 };
 
 const confirmCopy = async (id, parent_id) => {
@@ -330,7 +358,7 @@ const editBoqContext = (row) => {
             material: result.material_val,
             labor: result.labor_val
         };
-        //console.log(dataItem);
+        usdValue.value = result.labor_val;
         boqItem.errors = [];
         visibleBtn.value = true;
 
@@ -351,8 +379,9 @@ const editBoqActualContext = (row) => {
 };
 
 const submitForm = async () => {
+    dataItem = {...dataItem, labor: usdValue.value };
+
     if (dataItem.id > 0) {
-        //console.log(dataItem);
         await boqItem.update(dataItem);
     } else {
         await boqItem.create({ ...dataItem, level_id: boqTwoStore.selected.id });
@@ -360,6 +389,8 @@ const submitForm = async () => {
 
     if (boqItem.errors.length == 0) {
         visibleBtn.value = false;
+    }else{
+      usdValue.value = 0;
     }
 };
 
@@ -383,5 +414,54 @@ onMounted(async () => {
     ];
 });
 
+//Menu
+const menuBar = ref();
+const mItems = ref([
+  {
+    // label: 'Options',
+    items: [
+      {
+        label: 'New',
+        icon: 'pi pi-plus',
+        command: (ev) => {
+          createNewItem();
+        },
+      },
+      {
+        label: 'Copy',
+        icon: 'pi pi-copy',
+        command: (ev) => {
+          if(boqItem.items.filter(res => res.checked).map(res => res.id).length > 0){
+            copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected);
+          }else{
+            alert("Please select item!");
+          }
+        },
+      },
+    ],
+  },
+]);
+const toggle = (event) => {
+  menuBar.value.toggle(event);
+};
 
+//Exchange rate
+const checked1 = ref(false); // false = USD, true = KHR
+const usdValue = ref(0);
+const rate = 4000; // 1 USD = 4100 KHR
+
+const khrValue = computed(() => usdValue.value * rate);
+// value shown in input
+const displayValue = computed({
+get() {
+  return checked1.value ? khrValue.value : usdValue.value;
+},
+set(val) {
+  if (checked1.value) {
+    usdValue.value = val / rate;
+  } else {
+    usdValue.value = val;
+  }
+}
+});
 </script>

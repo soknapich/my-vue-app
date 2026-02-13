@@ -2,10 +2,18 @@
     <div>
         <!-- {{ levelOneStore.items.filter(res=>res.checked).map(res=>res.id) }} -->
         <div class="flex flex-column justify-end gap-1" v-if="levelOneStore.houseId">
-            <Button icon="pi pi-copy" severity="danger" v-if="levelOneStore.items.filter(res => res.checked).map(res => res.id).length > 0"
-                title="Duplicate" rounded text
-                @click="copyMultipleBoq(levelOneStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.houseId)" />
-            <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
+           <Button icon="pi pi-ellipsis-v"  rounded text tile="New"
+            @click="toggle"
+            aria-haspopup="true"
+            aria-controls="overlay_menu"/>
+            <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
+
+            <!--
+              <Button icon="pi pi-copy" severity="danger" v-if="levelOneStore.items.filter(res => res.checked).map(res => res.id).length > 0"
+                  title="Duplicate" rounded text
+                  @click="copyMultipleBoq(levelOneStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.houseId)" />
+              <Button icon="pi pi-plus" title="New" rounded text @click="openModal(true)" />
+             -->
         </div>
         <ContextMenu ref="cm" :model="menuModel" @hide="selectedItem = null" />
         <DataTable v-model:selection="levelOneStore.selected" @rowSelect="onRowSelect" contextMenu
@@ -204,4 +212,44 @@ onMounted(async () => {
 
     ];
 });
+
+//Menu
+const menuBar = ref();
+const mItems = ref([
+  {
+    // label: 'Options',
+    items: [
+      {
+        label: 'New',
+        icon: 'pi pi-plus',
+        command: (ev) => {
+          openModal(true);
+        },
+      },
+      {
+        label: 'Copy',
+        icon: 'pi pi-copy',
+        command: (ev) => {
+          if(levelOneStore.items.filter(res => res.checked).map(res => res.id).length > 0){
+            copyMultipleBoq(levelOneStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.houseId);
+          }else{
+            alert("Please select item!");
+          }
+        },
+      },
+      {
+        label: 'Send to',
+        icon: 'pi pi-send',
+        command: ()=>{
+          moveBoqItems(levelOneStore.houseId);
+        }
+      }
+
+    ],
+  },
+]);
+const toggle = (event) => {
+  menuBar.value.toggle(event);
+};
+
 </script>
