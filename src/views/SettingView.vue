@@ -50,16 +50,29 @@ const confirmDisable = async (user_id, disabled) => {
   })
 
   if (result) {
-    await createUserConcept({
+    const response = await createUserConcept({
       params: {
         "user_id": user_id,
         "is_allow": disabled ? 0 : 1
       }
     });
+    if (response.status) {
+      const resId = response.data?.data?.user_id;
+      const isAllow = response.data?.data?.is_allow;
+      if (resId) {
+        users.value = users.value.map((user) => {
+          if (user.id === resId) {
+            user.is_allow = isAllow == 1 ? true : false;
+          }
+          return user;
+        });
+      }
+      //console.log(resId == 1);
+    }
 
     //Refresh users
-    const response = await getAllUsers({});
-    users.value = response.data?.data;
+    //const response = await getAllUsers({});
+    //users.value = response.data?.data;
   }
 };
 

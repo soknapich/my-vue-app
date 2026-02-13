@@ -9,20 +9,19 @@
         {{ message }}
       </p>
 
-      <div class="flex justify-end gap-3">
-        <button
-          class="px-4 py-2 rounded border"
-          @click="cancel"
-        >
+      <!-- Center + Full width buttons -->
+      <!-- <div class="flex justify-center gap-3">
+        <button class="flex-1 px-4 py-2 rounded border text-center" @click="cancel">
           No
         </button>
 
-        <button
-          class="px-4 py-2 rounded bg-green-700 text-white"
-          @click="confirm"
-        >
+        <button class="flex-1 px-4 py-2 rounded bg-green-700 text-white text-center" @click="confirm">
           Yes
         </button>
+      </div> -->
+      <div class="flex gap-2">
+        <Button type="button" size="small" label="No" severity="secondary" @click="cancel" class="flex-1"></Button>
+        <Button type="button" size="small" label="Yes" @click="confirm" class="flex-1"></Button>
       </div>
     </div>
   </div>
