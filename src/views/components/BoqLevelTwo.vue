@@ -1,14 +1,13 @@
 <template>
+    <Toast position="top-right" />
     <div>
         <!-- {{ boqTwoStore.items.filter(res=>res.checked).map(res=>res.id) }} -->
         <div class="flex flex-column justify-end" v-if="levelOneStore.selected">
-            <Button icon="pi pi-ellipsis-v"  rounded text tile="New"
-             @click="toggle"
-             aria-haspopup="true"
-             aria-controls="overlay_menu"/>
-             <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
+            <Button icon="pi pi-ellipsis-v" rounded text tile="New" @click="toggle" aria-haspopup="true"
+                aria-controls="overlay_menu" />
+            <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
 
-             <!--
+            <!--
               <Button icon="pi pi-copy" severity="danger" v-if="boqTwoStore.items.filter(res=>res.checked).map(res=>res.id).length > 0"
                   title="Duplicate" rounded text
                   @click="copyMultipleBoq(boqTwoStore.items.filter(res=>res.checked).map(res=>res.id), levelOneStore.selected)" />
@@ -22,9 +21,9 @@
             v-if="boqTwoStore.items.length > 0">
             <!-- Checkbox Column -->
             <Column>
-              <template #body="slotProps">
-                <Checkbox v-model="slotProps.data.checked" binary size="small"/>
-              </template>
+                <template #body="slotProps">
+                    <Checkbox v-model="slotProps.data.checked" binary size="small" />
+                </template>
             </Column>
             <Column style="width:50px">
                 <template #body="{ index }">
@@ -63,6 +62,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useToast } from 'primevue/usetoast';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelOneStore } from '@/stores/boqLevelOne';
@@ -83,6 +83,17 @@ let dataItem = ref({
     parent_id: 0,
     name: '',
 });
+
+//Toast
+const toast = useToast();
+const showToast = (msg) => {
+    toast.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: msg,
+        life: 3000
+    })
+}
 
 //Context menu
 const cm = ref();
@@ -197,32 +208,33 @@ onMounted(async () => {
 //Menu
 const menuBar = ref();
 const mItems = ref([
-  {
-    // label: 'Options',
-    items: [
-      {
-        label: 'New',
-        icon: 'pi pi-plus',
-        command: (ev) => {
-          openModal(true);
-        },
-      },
-      {
-        label: 'Copy',
-        icon: 'pi pi-copy',
-        command: (ev) => {
-          if(boqTwoStore.items.filter(res=>res.checked).map(res=>res.id).length > 0){
-            copyMultipleBoq(boqTwoStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.selected);
-          }else{
-            alert("Please select item!");
-          }
-        },
-      },
-    ],
-  },
+    {
+        // label: 'Options',
+        items: [
+            {
+                label: 'New',
+                icon: 'pi pi-plus',
+                command: (ev) => {
+                    openModal(true);
+                },
+            },
+            {
+                label: 'Copy',
+                icon: 'pi pi-copy',
+                command: (ev) => {
+                    if (boqTwoStore.items.filter(res => res.checked).map(res => res.id).length > 0) {
+                        copyMultipleBoq(boqTwoStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.selected);
+                    } else {
+                        //alert("Please select item!");
+                        showToast("Please select item!");
+                    }
+                },
+            },
+        ],
+    },
 ]);
 const toggle = (event) => {
-  menuBar.value.toggle(event);
+    menuBar.value.toggle(event);
 };
 
 </script>

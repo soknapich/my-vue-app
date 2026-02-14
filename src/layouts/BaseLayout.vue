@@ -20,7 +20,7 @@
 
       <nav class="flex-1">
         <div v-for="item in menuItems" :key="item.name">
-          <RouterLink v-if="item.roles.includes(userInfo?.role)" :to="item.to" :title="collapsed ? item.name : null"
+          <RouterLink v-if="item.actived" :to="item.to" :title="collapsed ? item.name : null"
             class="flex items-center px-1 py-2 text-sm font-small transition-colors duration-150" :class="[
               isActive(item.to) ? 'bg-green-700 text-white' : 'hover:bg-green-100 text-gray-800',
               collapsed ? 'justify-center' : 'justify-start'
@@ -56,14 +56,9 @@ import { getUserInfoCookie } from '@/services/authentication';
 const route = useRoute();
 let userInfo: any = null;
 
-const menuItems = [
-  { name: "Home", to: "/", icon: LayoutDashboard, roles: ['admin', 'user'] },
-  { name: "Boq Report", to: "/estimate", icon: ListTree, roles: ['admin','manager'] },
-  { name: "Boq Input", to: "/boq-input", icon: Database, roles: ['admin','manager', 'user'] },
-  { name: "Setting", to: "/setting", icon: Settings, roles: ['admin','manager'	] },
-];
+let menuItems = ref([]);
 
-const collapsed = ref(true);
+const collapsed = ref(false);
 
 const toggle = () => {
   collapsed.value = !collapsed.value;
@@ -74,7 +69,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(to +
 
 // Optional: Dynamically generate title/breadcrumb
 const pageTitle = computed(() => {
-  const match = menuItems.find((item) => route.path.startsWith(item.to));
+  const match = menuItems.value.find((item) => route.path.startsWith(item.to));
   return match?.name ?? "Dashboard";
 });
 
@@ -86,6 +81,13 @@ const breadcrumbs = computed(() => {
 onMounted(async () => {
   const info = await getUserInfoCookie();
   userInfo = JSON.parse(info || '{}');
+  //console.log(userInfo?.role);
+  menuItems.value = [
+    { name: "Home", to: "/", icon: LayoutDashboard, actived: (['admin', 'user']).includes(userInfo?.role)? true : false },
+    { name: "Boq Report", to: "/estimate", icon: ListTree, actived: (['admin', 'manager']).includes(userInfo?.role)? true : false },
+    { name: "Boq Input", to: "/boq-input", icon: Database, actived: (['admin', 'manager', 'user']).includes(userInfo?.role)? true : false },
+    { name: "Setting", to: "/setting", icon: Settings, actived: (['admin', 'manager']).includes(userInfo?.role)? true : false },
+  ];
 });
 
 </script>

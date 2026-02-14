@@ -1,4 +1,5 @@
 <template>
+    <Toast position="top-right" />
     <div>
         <!-- {{ levelOneStore.items.filter(res=>res.checked).map(res=>res.id) }} -->
         <div class="flex flex-column justify-end gap-1" v-if="levelOneStore.houseId">
@@ -64,6 +65,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useToast } from 'primevue/usetoast';
 import { getUserInfoCookie } from '@/services/authentication';
 import MoveDialog from "@/views/components/MoveDialog.vue";
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
@@ -90,8 +92,18 @@ let dataItem = ref({
 const cm = ref();
 const selectedItem = ref();
 
-
 let menuModel = ref([]);
+
+//Toast
+const toast = useToast();
+const showToast = (msg) => {
+    toast.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: msg,
+        life: 3000
+    })
+}
 
 const openModal = (isNew) => {
 
@@ -233,7 +245,8 @@ const mItems = ref([
           if(levelOneStore.items.filter(res => res.checked).map(res => res.id).length > 0){
             copyMultipleBoq(levelOneStore.items.filter(res => res.checked).map(res => res.id), levelOneStore.houseId);
           }else{
-            alert("Please select item!");
+            //alert("Please select item!");
+            showToast("Please select item!");
           }
         },
       },

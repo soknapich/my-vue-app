@@ -1,15 +1,14 @@
 <template>
+    <Toast position="top-right" />
     <div class="">
         <!-- {{boqItem.items.filter(res => res.checked).map(res => res.id)}} -->
         <div class="flex flex-column justify-end" v-if="boqTwoStore.selected">
 
-        <Button icon="pi pi-ellipsis-v"  rounded text tile="New"
-         @click="toggle"
-         aria-haspopup="true"
-         aria-controls="overlay_menu"/>
-         <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
+            <Button icon="pi pi-ellipsis-v" rounded text tile="New" @click="toggle" aria-haspopup="true"
+                aria-controls="overlay_menu" />
+            <Menu ref="menuBar" id="overlay_menu" :model="mItems" :popup="true" />
 
-          <!--  <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
+            <!--  <Button icon="pi pi-copy" severity="danger" v-if="boqItem.items.filter(res => res.checked).map(res => res.id).length > 0"
                 title="Duplicate" rounded text
                 @click="copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected)" />
             <Button icon="pi pi-plus" title="New" rounded text @click="createNewItem();" />
@@ -128,22 +127,17 @@
                             <label for="labor" class="font-semibold">Labor Cost <span
                                     class="text-red-500">*</span></label>
 
-                                    <InputGroup>
-                                           <InputNumber
-                                             v-model="displayValue"
-                                             id="labor"
-                                             mode="currency"
-                                             :currency="checked1 ? 'KHR' : 'USD'"
-                                             locale="en-US"
-                                             size="small"
-                                           />
-                                         <InputGroupAddon>
-                                           <Checkbox v-model="checked1" binary size="small" title="Switch currency USD / KHR"/>
-                                         </InputGroupAddon>
-                                   </InputGroup>
-                                     <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
+                            <InputGroup>
+                                <InputNumber v-model="displayValue" id="labor" mode="currency"
+                                    :currency="checked1 ? 'KHR' : 'USD'" locale="en-US" size="small" />
+                                <InputGroupAddon>
+                                    <Checkbox v-model="checked1" binary size="small"
+                                        title="Switch currency USD / KHR" />
+                                </InputGroupAddon>
+                            </InputGroup>
+                            <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
 
-                              <!--  <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
+                            <!--  <InputNumber id="labor" v-model="dataItem.labor" size="small" class="flex-auto"
                                 mode="currency" currency="USD" locale="en-US" fluid autocomplete="off" />
                             <span class="text-red-500 text-sm">{{ boqItem.errors.labor?.[0] }}</span>
                             -->
@@ -151,7 +145,7 @@
                         </div>
                         <div class="col-span-12 md:col-span-6">
 
-                       </div>
+                        </div>
 
                     </div>
                 </div>
@@ -217,6 +211,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useToast } from 'primevue/usetoast';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
 import { useLevelTwoStore } from '@/stores/boqLevelTwo';
@@ -267,6 +262,17 @@ let dataItem = ref({
     material: 0,
     labor: 0
 });
+
+//Toast
+const toast = useToast();
+const showToast = (msg) => {
+    toast.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: msg,
+        life: 3000
+    })
+}
 
 //Context menu
 const cm = ref();
@@ -379,7 +385,7 @@ const editBoqActualContext = (row) => {
 };
 
 const submitForm = async () => {
-    dataItem = {...dataItem, labor: usdValue.value };
+    dataItem = { ...dataItem, labor: usdValue.value };
 
     if (dataItem.id > 0) {
         await boqItem.update(dataItem);
@@ -389,8 +395,8 @@ const submitForm = async () => {
 
     if (boqItem.errors.length == 0) {
         visibleBtn.value = false;
-    }else{
-      usdValue.value = 0;
+    } else {
+        usdValue.value = 0;
     }
 };
 
@@ -417,32 +423,33 @@ onMounted(async () => {
 //Menu
 const menuBar = ref();
 const mItems = ref([
-  {
-    // label: 'Options',
-    items: [
-      {
-        label: 'New',
-        icon: 'pi pi-plus',
-        command: (ev) => {
-          createNewItem();
-        },
-      },
-      {
-        label: 'Copy',
-        icon: 'pi pi-copy',
-        command: (ev) => {
-          if(boqItem.items.filter(res => res.checked).map(res => res.id).length > 0){
-            copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected);
-          }else{
-            alert("Please select item!");
-          }
-        },
-      },
-    ],
-  },
+    {
+        // label: 'Options',
+        items: [
+            {
+                label: 'New',
+                icon: 'pi pi-plus',
+                command: (ev) => {
+                    createNewItem();
+                },
+            },
+            {
+                label: 'Copy',
+                icon: 'pi pi-copy',
+                command: (ev) => {
+                    if (boqItem.items.filter(res => res.checked).map(res => res.id).length > 0) {
+                        copyMultipleBoq(boqItem.items.filter(res => res.checked).map(res => res.id), boqTwoStore.selected);
+                    } else {
+                        //alert("Please select item!");
+                        showToast("Please select item!");
+                    }
+                },
+            },
+        ],
+    },
 ]);
 const toggle = (event) => {
-  menuBar.value.toggle(event);
+    menuBar.value.toggle(event);
 };
 
 //Exchange rate
@@ -453,15 +460,15 @@ const rate = 4000; // 1 USD = 4100 KHR
 const khrValue = computed(() => usdValue.value * rate);
 // value shown in input
 const displayValue = computed({
-get() {
-  return checked1.value ? khrValue.value : usdValue.value;
-},
-set(val) {
-  if (checked1.value) {
-    usdValue.value = val / rate;
-  } else {
-    usdValue.value = val;
-  }
-}
+    get() {
+        return checked1.value ? khrValue.value : usdValue.value;
+    },
+    set(val) {
+        if (checked1.value) {
+            usdValue.value = val / rate;
+        } else {
+            usdValue.value = val;
+        }
+    }
 });
 </script>
