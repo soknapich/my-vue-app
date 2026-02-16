@@ -6,7 +6,19 @@
         <div class="col-span-12">
           <div class="bg-white text-gray-800 rounded-lg shadow p-2">
 
-            <DataTable scrollHeight="400px" scrollable selectionMode="single" :value="users" size="small">
+            <DataTable v-model:filters="filters" scrollHeight="400px" scrollable selectionMode="single" :value="users" size="small"
+            :globalFilterFields="['name','email','role']">
+              <template #header>
+                  <div class="flex justify-between">
+                      <Button type="button" icon="pi pi-filter-slash" size="small" label="Clear" variant="outlined" @click="clearFilter()" />
+                      <IconField>
+                          <InputIcon>
+                              <i class="pi pi-search" />
+                          </InputIcon>
+                          <InputText v-model="filters['global'].value" placeholder="Keyword Search" size="small"/>
+                      </IconField>
+                  </div>
+              </template>
               <Column field="id" header="#" style="width:50px" sortable>
                 <template #body="{ index }">
                   {{ index + 1 }}
@@ -36,8 +48,23 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getAllUsers, createUserConcept, deleteUserConcept } from '@/apis/user';
+
+const filters = ref();
+
+const initFilters = () => {
+    filters.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    };
+};
+const clearFilter = () => {
+    initFilters();
+};
+initFilters();
 
 const confirmDialog = ref(null);
 
