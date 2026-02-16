@@ -7,15 +7,15 @@
           <div class="bg-white text-gray-800 rounded-lg shadow p-2">
 
             <DataTable scrollHeight="400px" scrollable selectionMode="single" :value="users" size="small">
-              <Column header="#" style="width:50px">
+              <Column field="id" header="#" style="width:50px" sortable>
                 <template #body="{ index }">
                   {{ index + 1 }}
                 </template>
               </Column>
-              <Column field="name" header="Name"></Column>
-              <Column field="email" header="Email"></Column>
-              <Column field="role" header="Role"></Column>
-              <Column field="is_allow" header="Allow">
+              <Column field="name" header="Name" sortable></Column>
+              <Column field="email" header="Email" sortable></Column>
+              <Column field="role" header="Role" sortable></Column>
+              <Column field="is_allow" header="Allow" sortable>
                 <template #body="slotProps">
                   <Button label="Enabled" @click="confirmDisable(slotProps?.data?.id, slotProps?.data?.is_allow)"
                     size="small" severity="success" text v-if="slotProps?.data?.is_allow" />
