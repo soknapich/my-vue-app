@@ -35,6 +35,12 @@
             v-if="boqItem.items?.length > 0">
             <!-- Checkbox Column -->
             <Column>
+                <!-- HEADER CHECK ALL -->
+                <template #header>
+                  <Checkbox v-model="checkAll" @change="toggleAll" binary size="small"/>
+                </template>
+
+                <!-- ROW CHECKBOX -->
                 <template #body="slotProps">
                     <Checkbox v-model="slotProps.data.checked" binary size="small" />
                 </template>
@@ -210,7 +216,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useToast } from 'primevue/usetoast';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
@@ -236,6 +242,24 @@ let dataItemActual = ref({
     actual_labor: 0,
     row: {}
 });
+
+///Check All & watch
+const checkAll = ref(false);
+
+// Toggle all rows
+const toggleAll = () => {
+  boqItem.items.forEach(item => {
+    item.checked = checkAll.value;
+  });
+};
+
+// Auto update header checkbox if user manually clicks rows
+watch(
+  () => boqItem.items.map(i => i.checked),
+  (vals) => {
+    checkAll.value = vals.every(v => v === true);
+  }
+);
 
 const onChecked = (e) => {
     //alert(isSame.value);

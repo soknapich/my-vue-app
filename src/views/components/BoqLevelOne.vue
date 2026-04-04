@@ -23,6 +23,11 @@
             v-if="levelOneStore.items?.length > 0">
             <!-- Checkbox Column -->
             <Column>
+                <!-- HEADER CHECK ALL -->
+                <template #header>
+                  <Checkbox v-model="checkAll" @change="toggleAll" binary size="small"/>
+                </template>
+                <!-- ROW CHECKBOX -->
                 <template #body="slotProps">
                     <Checkbox v-model="slotProps.data.checked" binary size="small" />
                 </template>
@@ -64,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch  } from "vue";
 import { useToast } from 'primevue/usetoast';
 import { getUserInfoCookie } from '@/services/authentication';
 import MoveDialog from "@/views/components/MoveDialog.vue";
@@ -87,6 +92,24 @@ let dataItem = ref({
     house_id: 0,
     title: '',
 });
+
+///Check All & watch
+const checkAll = ref(false);
+
+// Toggle all rows
+const toggleAll = () => {
+  levelOneStore.items.forEach(item => {
+    item.checked = checkAll.value;
+  });
+};
+
+// Auto update header checkbox if user manually clicks rows
+watch(
+  () => levelOneStore.items.map(i => i.checked),
+  (vals) => {
+    checkAll.value = vals.every(v => v === true);
+  }
+);
 
 //Context menu
 const cm = ref();

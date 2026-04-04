@@ -21,6 +21,12 @@
             v-if="boqTwoStore.items.length > 0">
             <!-- Checkbox Column -->
             <Column>
+              <!-- HEADER CHECK ALL -->
+              <template #header>
+                <Checkbox v-model="checkAll" @change="toggleAll" binary size="small"/>
+              </template>
+
+              <!-- ROW CHECKBOX -->
                 <template #body="slotProps">
                     <Checkbox v-model="slotProps.data.checked" binary size="small" />
                 </template>
@@ -61,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useToast } from 'primevue/usetoast';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { getUserInfoCookie } from '@/services/authentication';
@@ -83,6 +89,24 @@ let dataItem = ref({
     parent_id: 0,
     name: '',
 });
+
+///Check All & watch
+const checkAll = ref(false);
+
+// Toggle all rows
+const toggleAll = () => {
+  boqTwoStore.items.forEach(item => {
+    item.checked = checkAll.value;
+  });
+};
+
+// Auto update header checkbox if user manually clicks rows
+watch(
+  () => boqTwoStore.items.map(i => i.checked),
+  (vals) => {
+    checkAll.value = vals.every(v => v === true);
+  }
+);
 
 //Toast
 const toast = useToast();
