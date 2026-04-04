@@ -394,7 +394,7 @@ const submitForm = async () => {
     }
 
     if (boqItem.errors.length == 0) {
-        visibleBtn.value = false;
+        //visibleBtn.value = false;
     } else {
         usdValue.value = 0;
     }
